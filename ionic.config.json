@@ -1,0 +1,7 @@
+{
+  "name": "pubquiz2",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "react-vite"
+}
