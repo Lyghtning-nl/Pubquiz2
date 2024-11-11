@@ -1,0 +1,42 @@
+# https://stackoverflow.com/questions/58500892/install-self-signed-certificates-no-longer-working-in-android-q
+
+[req]
+default_bits = 2048
+encrypt_key  = no # Change to encrypt the private key using des3 or similar
+default_md   = sha256
+prompt       = no
+utf8         = yes
+
+# Specify the DN here so we aren't prompted (along with prompt = no above).
+
+distinguished_name = req_distinguished_name
+
+# Extensions for SAN IP and SAN DNS
+
+req_extensions = v3_req
+
+# Be sure to update the subject to match your organization.
+
+[req_distinguished_name]
+C  = NL
+ST = ZuidHolland
+L  = Streefkerk
+O  = Lyghtning
+OU = Development
+CN = localhost
+
+# Allow client and server auth. You may want to only allow server auth.
+# Link to SAN names.
+
+[v3_req]
+basicConstraints     = CA:TRUE
+subjectKeyIdentifier = hash
+keyUsage             = digitalSignature, keyEncipherment
+extendedKeyUsage     = clientAuth, serverAuth
+subjectAltName       = @alt_names
+
+# Alternative names are specified as IP.# and DNS.# for IP addresses and
+# DNS accordingly.
+
+[alt_names]
+IP.1 = 192.168.2.15
