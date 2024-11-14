@@ -1,5 +1,5 @@
 ### Android applications do not work out-of-the box with the Appwrite self-hosted solution in Docker (on localhost).
-### It runs on a self-signed certificate which cannot be trusted by Adnroid apps. 
+### It runs on a self-signed certificate which cannot be trusted by Adnroid apps.
 ### Instead, setup a proxy with a custom self-signed certificate, and providue the certificate to the Android app.
 
 # 1. Setup SSL certificate to trust Appwrite on insecure https
