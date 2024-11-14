@@ -1,7 +1,7 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import Home from "./pages/Home";
+import Home from "./pages/Client";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -34,6 +34,7 @@ import "@ionic/react/css/palettes/dark.system.css";
 import "./theme/variables.css";
 import Master from "./pages/Master";
 import Center from "./pages/Center";
+import Client from "./pages/Client";
 
 setupIonicReact();
 
@@ -43,7 +44,7 @@ export default function App() {
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/">
-            <Home />
+            <Client />
           </Route>
           <Route exact path="/master">
             <Master />
