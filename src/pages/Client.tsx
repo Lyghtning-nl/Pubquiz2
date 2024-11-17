@@ -39,11 +39,6 @@ export default function Client() {
 
   return (
     <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Pubquiz 123</IonTitle>
-        </IonToolbar>
-      </IonHeader>
       <IonContent fullscreen>
         {gamesLoading && <>Laden...</>}
         {!gamesLoading && (
