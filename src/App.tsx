@@ -34,26 +34,36 @@ import "@ionic/react/css/palettes/dark.system.css";
 import "./theme/variables.css";
 import Master from "./pages/Master";
 import Center from "./pages/Center";
-import Client from "./pages/Client";
+import { GameContextProvider } from "./context/GameContext";
+import { RealtimeDataContextProvider } from "./context/RealtimeDataContext";
+import ScreenProvider from "./pages/ScreenProvider";
+import Authenticate from "./pages/Authenticate";
 
 setupIonicReact();
 
 export default function App() {
   return (
-    <IonApp>
-      <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/">
-            <Client />
-          </Route>
-          <Route exact path="/master">
-            <Master />
-          </Route>
-          <Route exact path="/center">
-            <Center />
-          </Route>
-        </IonRouterOutlet>
-      </IonReactRouter>
-    </IonApp>
+    <GameContextProvider>
+      <RealtimeDataContextProvider>
+        <IonApp>
+          <IonReactRouter>
+            <IonRouterOutlet>
+              <Route exact path="/">
+                <Authenticate />
+              </Route>
+              <Route exact path="/player">
+                <ScreenProvider userType="client" />
+              </Route>
+              <Route exact path="/master">
+                <Master />
+              </Route>
+              <Route exact path="/center">
+                <Center />
+              </Route>
+            </IonRouterOutlet>
+          </IonReactRouter>
+        </IonApp>
+      </RealtimeDataContextProvider>
+    </GameContextProvider>
   );
 }

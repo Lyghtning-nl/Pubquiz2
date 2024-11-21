@@ -12,6 +12,9 @@ const proxy = httpProxy.createServer({
     cert: fs.readFileSync("./cert.crt", "utf8"),
   },
   secure: false,
+  proxyTimeout: 30000,
+  socketTimeout: 30000,
+  maxConnections: 100,
 });
 
 proxy.on("proxyReq", (proxyReq, req, res) => {
@@ -19,5 +22,5 @@ proxy.on("proxyReq", (proxyReq, req, res) => {
 });
 
 proxy.listen(4200, () => {
-  console.log("listening");
+  console.log("listening 4200");
 });

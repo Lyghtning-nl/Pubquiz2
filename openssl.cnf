@@ -23,7 +23,7 @@ ST = ZuidHolland
 L  = Streefkerk
 O  = Lyghtning
 OU = Development
-CN = localhost
+CN = pubquiz2
 
 # Allow client and server auth. You may want to only allow server auth.
 # Link to SAN names.
@@ -40,3 +40,4 @@ subjectAltName       = @alt_names
 
 [alt_names]
 IP.1 = 192.168.2.15
+IP.2 = 192.168.92.9
