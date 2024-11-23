@@ -1,7 +1,7 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import Home from "./pages/Client";
+import Home from "./pages/__Client";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -28,42 +28,48 @@ import "@ionic/react/css/display.css";
 
 /* import '@ionic/react/css/palettes/dark.always.css'; */
 /* import '@ionic/react/css/palettes/dark.class.css'; */
-import "@ionic/react/css/palettes/dark.system.css";
+// import "@ionic/react/css/palettes/dark.system.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import Master from "./pages/Master";
-import Center from "./pages/Center";
+
 import { GameContextProvider } from "./context/GameContext";
-import { RealtimeDataContextProvider } from "./context/RealtimeDataContext";
 import ScreenProvider from "./pages/ScreenProvider";
-import Authenticate from "./pages/Authenticate";
+import EnterGame from "./pages/EnterGame";
+import { RealtimeDataContextProvider } from "./context/RealtimeDataContext";
+import { AppwriteUserContextProvider } from "./context/AppwriteUserContext";
+import { Container } from "@mui/material";
 
 setupIonicReact();
 
 export default function App() {
   return (
     <GameContextProvider>
-      <RealtimeDataContextProvider>
-        <IonApp>
-          <IonReactRouter>
-            <IonRouterOutlet>
-              <Route exact path="/">
-                <Authenticate />
-              </Route>
-              <Route exact path="/player">
-                <ScreenProvider userType="client" />
-              </Route>
-              <Route exact path="/master">
-                <Master />
-              </Route>
-              <Route exact path="/center">
-                <Center />
-              </Route>
-            </IonRouterOutlet>
-          </IonReactRouter>
-        </IonApp>
-      </RealtimeDataContextProvider>
+      <AppwriteUserContextProvider>
+        <RealtimeDataContextProvider>
+          <IonApp>
+            <IonReactRouter>
+              <IonRouterOutlet>
+                <Route exact path="/">
+                  <EnterGame />
+                </Route>
+                <Route exact path="/client">
+                  <ScreenProvider userType="client" />
+                </Route>
+                <Route exact path="/center">
+                  <ScreenProvider userType="center" />
+                </Route>
+                <Route exact path="/master">
+                  <ScreenProvider userType="master" />
+                </Route>
+                <Route>
+                  <Redirect to="/" />
+                </Route>
+              </IonRouterOutlet>
+            </IonReactRouter>
+          </IonApp>
+        </RealtimeDataContextProvider>
+      </AppwriteUserContextProvider>
     </GameContextProvider>
   );
 }

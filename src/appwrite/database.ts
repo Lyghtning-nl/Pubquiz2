@@ -16,7 +16,8 @@ type CollectionMethods<T extends Models.Document = Models.Document> = {
   get: (id: string) => Promise<T>;
   delete: (id: string) => Promise<{}>;
   subscribe: (
-    callback: (payload: RealtimeResponseEvent<T>) => void
+    callback: (payload: RealtimeResponseEvent<T>) => void,
+    path?: string
   ) => () => void;
 };
 
@@ -55,9 +56,9 @@ collections.forEach((col) => {
       appwriteDatabases.listDocuments(col.databaseId, col.id, queries),
     delete: (id) =>
       appwriteDatabases.deleteDocument(col.databaseId, col.id, id),
-    subscribe: (callback: (response: any) => void) => {
+    subscribe: (callback: (response: any) => void, path) => {
       return appwriteClient.subscribe(
-        `databases.${DATABASE_ID}.collections.${col.id}.documents`,
+        `databases.${DATABASE_ID}.collections.${col.id}${path ? path : ""}`,
         callback
       );
     },

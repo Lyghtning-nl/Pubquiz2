@@ -13,4 +13,8 @@ export type RealtimeDataDocument = Models.Document & {
   screen: "index" | "intro" | "arena" | "summary";
 };
 
-export type UserTypes = "client" | "center" | "master";
+export type GameDocument = Models.Document & {
+  code: string;
+};
+
+export type UserTypes = "client" | "center" | "master" | "generic";

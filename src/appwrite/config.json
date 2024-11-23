@@ -1,7 +1,0 @@
-{
-  "endpointTEST": "https://192.168.92.9:4200/v1",
-  "endpoint": "https://192.168.2.15:4200/v1",
-  "projectId": "672a75920004dd1982c6",
-  "apiKey": "standard_b1f78c55ba63aafad2052d1bf78c7a89acee6f6418d8bb0a85e51c8f13a18c439e3d8d29d4a4a4faa51ef507a91e8cfbce85e362fd02ff6530de25ad2b0075ec452eb833e72b5f48d88cb4437710c0413773dbd66096e44090964f7af5b4e949b643639c27d39a09a4876ba2f2a0d2892f53a1c6d8b5fc24faec23600308b407",
-  "databaseId": "pubquiz"
-}

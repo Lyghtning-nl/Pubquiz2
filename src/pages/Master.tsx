@@ -2,16 +2,13 @@ import { IonContent, IonPage } from "@ionic/react";
 
 import { useCallback, useEffect, useState } from "react";
 import { appwriteDb } from "../appwrite/database";
-import {
-  appwriteClient,
-  COLLECTION_ID_ANSWERS,
-  DATABASE_ID,
-} from "../appwrite/config";
+
 import { CanvasViewer } from "../components/Canvas";
 import { AnswerDocument } from "../appwrite/types";
 import { Box } from "@mui/system";
 import { IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
+import { Query } from "appwrite";
 
 const CanvasAnswer = ({ answer }: { answer: AnswerDocument }) => {
   return (
@@ -36,10 +33,12 @@ export default function Master() {
   const [answers, setAnswers] = useState<AnswerDocument[]>([]);
 
   const getAnswers = useCallback(() => {
-    appwriteDb.answers.list().then((response) => {
-      setAnswers(response.documents as AnswerDocument[]);
-      setAnswersLoading(false);
-    });
+    appwriteDb.answers
+      .list([Query.limit(100), Query.orderDesc("$id")])
+      .then((response) => {
+        setAnswers(response.documents as AnswerDocument[]);
+        setAnswersLoading(false);
+      });
   }, []);
 
   useEffect(() => {
@@ -47,7 +46,7 @@ export default function Master() {
 
     const unsubscribe = appwriteDb.answers.subscribe((response) => {
       getAnswers();
-    });
+    }, ".documents");
 
     return () => unsubscribe();
   }, [getAnswers]);

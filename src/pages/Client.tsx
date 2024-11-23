@@ -1,139 +1,70 @@
-import { IonContent, IonPage } from "@ionic/react";
-import { useCallback, useEffect, useState } from "react";
-import { Account, ID, Models, Query } from "appwrite";
-import { CanvasInput } from "../components/Canvas";
-import { appwriteDb } from "../appwrite/database";
-import { useGameContext } from "../context/GameContext";
-import { Box } from "@mui/system";
-import { Button } from "@mui/material";
-import { Send } from "@mui/icons-material";
-import { appwriteClient } from "../appwrite/config";
-import { RealtimeDataDocument } from "../appwrite/types";
-import { useAppwriteAccountSession } from "../hooks/AppwriteAccountSession";
+import { useEffect, useState } from "react";
+import {
+  useAppwriteUserContext,
+  useCreateAppwriteUserSession,
+} from "../context/AppwriteUserContext";
+import { Stack } from "@mui/system";
+import { Button, LinearProgress, TextField, Typography } from "@mui/material";
+import config from "../config.json";
 
 export default function Client() {
-  const { appwriteUser } = useAppwriteAccountSession();
-  const gameContext = useGameContext();
-
-  const [gamesLoading, setGamesLoading] = useState(true);
-  const [realtimeDataLoading, setRealtimeDataLoading] = useState(true);
-  const [games, setGames] = useState<Models.Document[]>([]);
-  const [realtimeData, setRealtimeData] = useState<RealtimeDataDocument[]>([]);
-
-  const [gameCodeInput, setGamecodeInput] = useState("");
-
-  const getGames = useCallback(() => {
-    appwriteDb.games.list().then((response) => {
-      setGames(response.documents);
-      setGamesLoading(false);
-
-      // console.log(response);
-    });
-  }, []);
-
-  const getRealtimeData = useCallback(() => {
-    appwriteDb.realtime_data.list().then((response) => {
-      setRealtimeData(response.documents as RealtimeDataDocument[]);
-      setRealtimeDataLoading(false);
-    });
-  }, []);
-
-  const createAccount = () => {
-    const account = new Account(appwriteClient);
-    account
-      .create(ID.unique(), "dummy@dummy.nl", "securepassword", "Team Naam")
-      .then((response) => {
-        console.log("Account created successfully:", response);
-      })
-      .catch((error) => {
-        console.error("Error creating account:", error);
-      });
-  };
-
-  const loginAccount = () => {
-    const account = new Account(appwriteClient);
-    const promise = account.createEmailPasswordSession(
-      "dummy@dummy.nl",
-      "securepassword"
-    );
-    promise.then(
-      function (response) {
-        console.log(response); // Success
-      },
-      function (error) {
-        console.log(error); // Failure
-      }
-    );
-  };
-
-  const getAccount = () => {
-    console.log(appwriteUser);
-  };
+  const appwriteUser = useAppwriteUserContext();
 
   useEffect(() => {
-    appwriteDb.games
-      .list([Query.equal("code", "TEST_GAME")])
-      .then((response) => {
-        console.log(response);
-      });
+    console.log(appwriteUser);
+  }, [appwriteUser]);
 
-    getGames();
-    getRealtimeData();
+  if (appwriteUser.loading) return <LinearProgress />;
+  if (appwriteUser.user === null) return <SetDisplayName />;
+}
 
-    if (gameContext?.game.code) setGamecodeInput(gameContext.game.code);
+export function SetDisplayName() {
+  const { loading, session, error, createSession } =
+    useCreateAppwriteUserSession();
+  const [displayName, setDisplayName] = useState("");
+  const [sessionId, setSessionId] = useState<string | null>(null);
 
-    const unsubscribeGames = appwriteDb.games.subscribe(() => {
-      getGames();
-    });
+  const [response, setResponse] = useState("");
+  const [name, setName] = useState("");
 
-    const unsubscribeRealtimeData = appwriteDb.realtime_data.subscribe(() => {
-      getRealtimeData();
-    });
+  const handleSubmit = async () => {
+    try {
+      const res = await fetch(config.expressEndpoint);
+      if (!res.ok) throw new Error("Failed to fetch");
+      const data = await res.json();
+      setResponse(data.message);
+    } catch (err) {
+      setResponse("Error: Could not connect to the server.");
+    }
+  };
 
-    return () => {
-      unsubscribeGames();
-      unsubscribeRealtimeData();
-    };
-  }, [getGames, getRealtimeData, gameContext]);
+  if (loading) return <LinearProgress />;
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <Box>
-          <Button variant="contained" onClick={() => createAccount()}>
-            Maak user
-          </Button>
+    <Stack>
+      {response}
+      <TextField
+        label="Kies een teamnaam"
+        value={displayName}
+        onChange={(e) => setDisplayName(e.target.value)}
+      />
+      <Button variant="contained" onClick={handleSubmit}>
+        Opslaan
+      </Button>
 
-          <Button variant="contained" onClick={() => loginAccount()}>
-            Login User
-          </Button>
+      {/* Toon het sessie ID als de sessie succesvol is aangemaakt */}
+      {sessionId && (
+        <Typography variant="body1" color="primary" mt={2}>
+          Sessies ID: {sessionId}
+        </Typography>
+      )}
 
-          <Button variant="contained" onClick={() => getAccount()}>
-            Get User
-          </Button>
-        </Box>
-
-        {gamesLoading && <>Laden...</>}
-        {!gamesLoading && (
-          <>
-            Games:
-            {games.map((game) => (
-              <div key={game.$id}>{game.name}</div>
-            ))}
-          </>
-        )}
-
-        {realtimeDataLoading && <>Laden...</>}
-        {!realtimeDataLoading && (
-          <>
-            Realtimedata:
-            {realtimeData.map((data) => (
-              <div key={data.$id}>{data.screen}</div>
-            ))}
-          </>
-        )}
-        <CanvasInput />
-      </IonContent>
-    </IonPage>
+      {/* Foutmelding als er iets misgaat */}
+      {error && (
+        <Typography variant="body1" color="error" mt={2}>
+          Error: {error.message}
+        </Typography>
+      )}
+    </Stack>
   );
 }

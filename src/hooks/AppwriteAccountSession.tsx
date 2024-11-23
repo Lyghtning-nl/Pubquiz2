@@ -1,10 +1,8 @@
 import { useState, useEffect } from "react";
 import { Account, Models } from "appwrite";
-import { appwriteClient } from "../appwrite/config";
+import { appwriteAccount, appwriteClient } from "../appwrite/config";
 
 export function useAppwriteAccountSession() {
-  const account = new Account(appwriteClient);
-
   const [appwriteAccountLoading, setAppwriteAccountLoading] = useState(true);
   const [appwriteUser, setAppwriteUser] =
     useState<Models.User<Models.Preferences> | null>(null);
@@ -14,7 +12,7 @@ export function useAppwriteAccountSession() {
     const fetchAccount = async () => {
       setAppwriteAccountLoading(true);
       try {
-        const response = await account.get();
+        const response = await appwriteAccount.get();
         setAppwriteUser(response);
         setAppwriteAccountError(null);
       } catch (err) {
