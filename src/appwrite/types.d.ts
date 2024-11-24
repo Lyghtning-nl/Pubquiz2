@@ -17,4 +17,16 @@ export type GameDocument = Models.Document & {
   code: string;
 };
 
-export type UserTypes = "client" | "center" | "master" | "generic";
+export type UserTypes = "player" | "center" | "master" | "generic";
+
+// Backend response type
+export interface CreateAppwriteUserResponse {
+  message: string;
+  user: Models.User<Models.Preferences>;
+  token: Models.Token;
+}
+
+export interface UpdateAppwriteUserNameResponse {
+  message: string;
+  user: Models.User<Models.Preferences>;
+}

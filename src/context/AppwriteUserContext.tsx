@@ -1,4 +1,4 @@
-import { Account, ID, Models } from "appwrite";
+import { Models } from "appwrite";
 import {
   createContext,
   ReactNode,
@@ -14,6 +14,7 @@ interface AppwriteUserContextProviderProps {
 
 interface AppwriteUserContextProps {
   user: Models.User<Models.Preferences> | null;
+  setUser: (user: AppwriteUserContextProps["user"]) => void;
   loading: boolean;
 }
 
@@ -24,20 +25,17 @@ export function AppwriteUserContextProvider({
   children,
 }: AppwriteUserContextProviderProps) {
   const [loading, setLoading] = useState(true);
-  const [user, setUser] = useState<Models.User<Models.Preferences> | null>(
+  const [user, setUserState] = useState<Models.User<Models.Preferences> | null>(
     null
   );
-  const [error, setError] = useState<any>(null);
 
   useEffect(() => {
     const fetchAccount = async () => {
       try {
         const response = await appwriteAccount.get();
         setUser(response);
-        setError(null);
       } catch (err) {
         setUser(null);
-        setError(err);
       } finally {
         setLoading(false);
       }
@@ -46,8 +44,13 @@ export function AppwriteUserContextProvider({
     fetchAccount();
   }, []);
 
+  const setUser = (user: AppwriteUserContextProps["user"]) => {
+    setUserState(user);
+  };
+
   const contextValue: AppwriteUserContextProps = {
     user,
+    setUser,
     loading,
   };
   return (
@@ -67,34 +70,4 @@ export const useAppwriteUserContext = () => {
   }
 
   return context;
-};
-
-export const useCreateAppwriteUserSession = () => {
-  const [loading, setLoading] = useState<boolean>(false);
-  const [session, setSession] = useState<Models.Session | null>(null);
-  const [error, setError] = useState<Error | null>(null);
-
-  const createSession = async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const response = await appwriteAccount.createSession(
-        ID.unique(),
-        "secret"
-      );
-      setSession(response);
-    } catch (err) {
-      setError(err instanceof Error ? err : new Error("Something went wrong"));
-    } finally {
-      setLoading(false); // Zorg ervoor dat loading altijd wordt uitgezet
-    }
-  };
-
-  return {
-    loading,
-    session,
-    error,
-    createSession,
-  };
 };

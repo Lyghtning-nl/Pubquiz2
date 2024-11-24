@@ -13,7 +13,6 @@ import {
   ReactSketchCanvasRef,
 } from "react-sketch-canvas";
 import { appwriteDb } from "../appwrite/database";
-import { c } from "vitest/dist/reporters-5f784f42";
 
 export const CanvasInput = () => {
   const theme = useTheme();

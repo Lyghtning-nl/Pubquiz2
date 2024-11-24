@@ -1,5 +1,23 @@
 /* For information on how to create your own theme, please see:
 http://ionicframework.com/docs/theming/ */
+
+@font-face {
+  font-family: "Rubik-Italic";
+  font-weight: 125 950;
+  font-stretch: 75% 125%;
+  font-style: italic;
+  src: url("../fonts/Rubik-Italic-VariableFont_wght.ttf");
+}
+
+@font-face {
+  font-family: "Rubik";
+  font-weight: 125 950;
+  font-stretch: 75% 125%;
+  font-style: normal;
+  src: url("../fonts/Rubik-VariableFont_wght.ttf");
+}
+
 :root {
   --ion-background-color: #fff;
+  --ion-font-family: "Rubik";
 }

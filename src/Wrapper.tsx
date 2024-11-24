@@ -1,4 +1,5 @@
-import { Box, Container } from "@mui/system";
+import { IonContent, IonPage } from "@ionic/react";
+import { Box, Container, Stack } from "@mui/system";
 import React from "react";
 
 type WrapperProps = {
@@ -7,8 +8,12 @@ type WrapperProps = {
 
 export default function Wrapper({ children }: WrapperProps): JSX.Element {
   return (
-    <Box sx={{ py: 3 }}>
-      <Container maxWidth={false}>{children}</Container>
-    </Box>
+    <IonPage>
+      <IonContent fullscreen>
+        <Stack sx={{ py: 3, height: "100%", background: "lightblue" }}>
+          <Container maxWidth={false}>{children}</Container>
+        </Stack>
+      </IonContent>
+    </IonPage>
   );
 }

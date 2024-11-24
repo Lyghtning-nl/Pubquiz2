@@ -10,6 +10,7 @@ import {
 import { GameContext } from "./GameContext";
 import { appwriteDb } from "../appwrite/database";
 import { RealtimeDataDocument } from "../appwrite/types";
+import { Box } from "@mui/system";
 
 export interface RealtimeDataProps {
   realtimeData: RealtimeDataDocument | null;
@@ -40,47 +41,41 @@ export const RealtimeDataContext = createContext<RealtimeDataProps | null>(
 export function RealtimeDataContextProvider({
   children,
 }: RealtimeDataProviderProps) {
-  const [realtimeData, setRealtimeData] = useState<RealtimeDataDocument | null>(
-    null
-  );
+  const [realtimeData, setRealtimeDataState] =
+    useState<RealtimeDataDocument | null>(null);
   const [loading, setLoading] = useState(true);
-  const gameContext = useContext(GameContext);
 
-  // console.log(gameContext?.game);
+  useEffect(() => {
+    appwriteDb.realtime_data.list().then((response) => {
+      setRealtimeDataState(response.documents[0] as RealtimeDataDocument);
+      setLoading(false);
+    });
+  }, []);
 
-  // const getRealtimeData = useCallback(() => {
-  //   appwriteDb.realtime_data.list().then((response) => {
-  //     setRealtimeData(response.documents as RealtimeDataDocument[]);
-  //     setLoading(false);
-  //   });
-  // }, []);
+  useEffect(() => {
+    const unsubscribeRealtimeData = appwriteDb.realtime_data.subscribe(
+      (response) => {
+        setRealtimeDataState(response.payload as RealtimeDataDocument);
+      },
+      ".documents"
+    );
 
-  // useEffect(() => {
-  //   if (!loading && useGameContext?.game.code === "")
-  //     return setError("No roomCode available");
+    return () => {
+      unsubscribeRealtimeData();
+    };
+  }, []);
 
-  //   getRealtimeData();
-
-  //   const fetchData = () => {
-  //     // onValue(
-  //     //   ref(
-  //     //     database,
-  //     //     `/games/${useGameContext?.room.code}${RTDB_LOCATION_REALTIMEDATA}`
-  //     //   ),
-  //     //   (snapshot) => {
-  //     //     const realtimeData: RealtimeDataEntries = snapshot.val();
-  //     //     setData(realtimeData);
-  //     //     setLoading(false);
-  //     //   }
-  //     // );
-  //   };
-
-  //   const unsubscribe = appwriteDb.realtime_data.subscribe(() => {
-  //     // getGames();
-  //   });
-
-  //   return () => unsubscribe();
-  // }, [setRealtimeData, useGameContext, loading]);
+  const setRealtimeData = (realtimeData: RealtimeDataProps["realtimeData"]) => {
+    if (realtimeData !== null) {
+      setRealtimeDataState(realtimeData);
+      appwriteDb.realtime_data.update(realtimeData?.$id, {
+        countdown_timer_active: realtimeData.countdown_timer_active,
+        question_index: realtimeData.question_index,
+        round_index: realtimeData.round_index,
+        screen: realtimeData.screen,
+      });
+    }
+  };
 
   const contextValue: RealtimeDataProps = {
     realtimeData,
@@ -90,6 +85,9 @@ export function RealtimeDataContextProvider({
 
   return (
     <RealtimeDataContext.Provider value={contextValue}>
+      <Box sx={{ position: "absolute", right: 15 }}>
+        {realtimeData?.question_index}
+      </Box>
       {children}
     </RealtimeDataContext.Provider>
   );

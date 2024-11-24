@@ -12,7 +12,10 @@ import { Models } from "appwrite";
 type CollectionMethods<T extends Models.Document = Models.Document> = {
   list: (queries?: string[]) => Promise<Models.DocumentList<T>>;
   create: (payload: Partial<T>, id?: string) => Promise<T>;
-  update: (id: string, payload: Partial<T>) => Promise<T>;
+  update: (
+    id: string,
+    payload?: Partial<Omit<Models.Document, keyof Models.Document>> | undefined
+  ) => Promise<T>;
   get: (id: string) => Promise<T>;
   delete: (id: string) => Promise<{}>;
   subscribe: (

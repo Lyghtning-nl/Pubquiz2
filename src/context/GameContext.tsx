@@ -10,6 +10,9 @@ import { appwriteDb } from "../appwrite/database";
 import { Query } from "appwrite";
 
 export const GAME_CONTEXT_LOCAL_STORAGE_KEY = "game-context";
+interface GameContextProviderProps {
+  children: ReactNode;
+}
 
 interface GameContextProps {
   game: GameDocument | null;
@@ -17,15 +20,11 @@ interface GameContextProps {
   loading: boolean;
 }
 
-interface GameContextProviderProps {
-  children: ReactNode;
-}
-
 export const GameContext = createContext<GameContextProps | null>(null);
 
 export function GameContextProvider({ children }: GameContextProviderProps) {
-  const [game, setGameState] = useState<GameDocument | null>(null);
   const [loading, setLoading] = useState(true);
+  const [game, setGameState] = useState<GameDocument | null>(null);
 
   useEffect(() => {
     const gameCodeInLocalStorage = localStorage.getItem(
@@ -47,10 +46,14 @@ export function GameContextProvider({ children }: GameContextProviderProps) {
   }, []);
 
   const setGame = (game: GameContextProps["game"]) => {
-    localStorage.setItem(
-      GAME_CONTEXT_LOCAL_STORAGE_KEY,
-      JSON.stringify(game?.code)
-    );
+    if (game === null) {
+      localStorage.removeItem(GAME_CONTEXT_LOCAL_STORAGE_KEY);
+    } else {
+      localStorage.setItem(
+        GAME_CONTEXT_LOCAL_STORAGE_KEY,
+        JSON.stringify(game?.code)
+      );
+    }
 
     setGameState(game);
   };

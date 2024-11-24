@@ -1,7 +1,6 @@
 import { Redirect, Route } from "react-router-dom";
 import { IonApp, IonRouterOutlet, setupIonicReact } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
-import Home from "./pages/__Client";
 
 /* Core CSS required for Ionic components to work properly */
 import "@ionic/react/css/core.css";
@@ -34,11 +33,12 @@ import "@ionic/react/css/display.css";
 import "./theme/variables.css";
 
 import { GameContextProvider } from "./context/GameContext";
-import ScreenProvider from "./pages/ScreenProvider";
+import ScreenProvider from "./components/ScreenProvider";
 import EnterGame from "./pages/EnterGame";
 import { RealtimeDataContextProvider } from "./context/RealtimeDataContext";
 import { AppwriteUserContextProvider } from "./context/AppwriteUserContext";
 import { Container } from "@mui/material";
+import Sonos from "./pages/Sonos";
 
 setupIonicReact();
 
@@ -53,14 +53,17 @@ export default function App() {
                 <Route exact path="/">
                   <EnterGame />
                 </Route>
-                <Route exact path="/client">
-                  <ScreenProvider userType="client" />
+                <Route exact path="/player">
+                  <ScreenProvider userType="player" />
                 </Route>
                 <Route exact path="/center">
                   <ScreenProvider userType="center" />
                 </Route>
                 <Route exact path="/master">
                   <ScreenProvider userType="master" />
+                </Route>
+                <Route exact path="/sonos">
+                  <Sonos />
                 </Route>
                 <Route>
                   <Redirect to="/" />

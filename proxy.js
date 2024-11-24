@@ -41,4 +41,4 @@ function createProxy(targetPort, listenPort) {
 
 // Maak proxies aan
 createProxy(80, 4200); // Proxy voor localhost:80
-createProxy(8000, 4300); // Proxy voor localhost:8000
+// createProxy(8000, 4300); // Proxy voor localhost:8000
