@@ -12,7 +12,12 @@ export const TextScreen = (props: TextScreenProps) => {
   const { h1, h2, h3, children } = props;
 
   return (
-    <Stack alignItems="center">
+    <Stack
+      alignItems="center"
+      sx={(theme) => ({
+        gap: theme.spacings.md,
+      })}
+    >
       {h1 && (
         <Typography
           variant="h1"

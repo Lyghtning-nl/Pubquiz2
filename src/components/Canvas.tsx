@@ -5,7 +5,7 @@ import {
   Undo,
 } from "@mui/icons-material";
 import { Button, IconButton, useTheme } from "@mui/material";
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 import * as React from "react";
 import {
   CanvasPath,

@@ -32,47 +32,63 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-import { GameContextProvider } from "./context/GameContext";
 import ScreenProvider from "./components/ScreenProvider";
 import EnterGame from "./pages/EnterGame";
-import { RealtimeDataContextProvider } from "./context/RealtimeDataContext";
-import { AppwriteUserContextProvider } from "./context/AppwriteUserContext";
-import { Container } from "@mui/material";
-import Sonos from "./pages/Sonos";
 
-setupIonicReact();
+import Sonos from "./pages/Sonos";
+import { useEffect } from "react";
+import { StatusBar } from "@capacitor/status-bar";
+import { Capacitor } from "@capacitor/core";
+import { ContextProviders } from "./ContextProviders";
+
+setupIonicReact({
+  swipeBackEnabled: false,
+});
 
 export default function App() {
+  useEffect(() => {
+    if (Capacitor.getPlatform() !== "web") {
+      const hideStatusBar = async () => {
+        await StatusBar.hide();
+      };
+      hideStatusBar();
+    }
+  }, []);
+
   return (
-    <GameContextProvider>
-      <AppwriteUserContextProvider>
-        <RealtimeDataContextProvider>
-          <IonApp>
-            <IonReactRouter>
-              <IonRouterOutlet>
-                <Route exact path="/">
-                  <EnterGame />
-                </Route>
-                <Route exact path="/player">
-                  <ScreenProvider userType="player" />
-                </Route>
-                <Route exact path="/center">
-                  <ScreenProvider userType="center" />
-                </Route>
-                <Route exact path="/master">
-                  <ScreenProvider userType="master" />
-                </Route>
-                <Route exact path="/sonos">
-                  <Sonos />
-                </Route>
-                <Route>
-                  <Redirect to="/" />
-                </Route>
-              </IonRouterOutlet>
-            </IonReactRouter>
-          </IonApp>
-        </RealtimeDataContextProvider>
-      </AppwriteUserContextProvider>
-    </GameContextProvider>
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          <Route exact path="/">
+            <ContextProviders>
+              <EnterGame />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/player">
+            <ContextProviders>
+              <ScreenProvider userType="player" />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/center">
+            <ContextProviders>
+              <ScreenProvider userType="center" />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/master">
+            <ContextProviders>
+              <ScreenProvider userType="master" />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/sonos">
+            <ContextProviders>
+              <Sonos />
+            </ContextProviders>
+          </Route>
+          <Route>
+            <Redirect to="/" />
+          </Route>
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
   );
 }

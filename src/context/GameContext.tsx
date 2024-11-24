@@ -103,7 +103,7 @@ export async function validateGameCodeAndReturnGame(
       return {
         valid: false,
         game: null,
-        message: "Non-existing game",
+        message: "Deze game bestaat niet",
       };
     }
   } catch (err) {

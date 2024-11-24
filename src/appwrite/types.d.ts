@@ -23,10 +23,16 @@ export type UserTypes = "player" | "center" | "master" | "generic";
 export interface CreateAppwriteUserResponse {
   message: string;
   user: Models.User<Models.Preferences>;
+  team: Models.Membership;
   token: Models.Token;
 }
 
 export interface UpdateAppwriteUserNameResponse {
   message: string;
   user: Models.User<Models.Preferences>;
+}
+
+export interface CreateAppwriteUserMembershipResponse {
+  message: string;
+  membership: Models.Membership;
 }

@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useAppwriteUserContext } from "../context/AppwriteUserContext";
 import {
   CreateAppwriteUserResponse,
+  GameDocument,
   UpdateAppwriteUserNameResponse,
 } from "../appwrite/types";
 import { appwriteAccount } from "../appwrite/config";
@@ -13,7 +14,9 @@ export const useCreateAppwriteUserSession = () => {
   const [error, setError] = useState("");
   const [response, setResponse] = useState("");
 
-  const createUserAndSession = async () => {
+  const createUserAndSessionAndMembership = async (
+    gameCode: GameDocument["code"]
+  ) => {
     try {
       setLoading(true);
 
@@ -21,6 +24,12 @@ export const useCreateAppwriteUserSession = () => {
         config.expressEndpoint + "appwrite/user/create",
         {
           method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            teamId: gameCode, //Team ID equals game code!
+          }),
         }
       );
 
@@ -44,7 +53,7 @@ export const useCreateAppwriteUserSession = () => {
     loading,
     response,
     error,
-    createUserAndSession,
+    createUserAndSessionAndMembership,
   };
 };
 
@@ -93,3 +102,50 @@ export const useUpdateAppwriteUserName = () => {
     updateUserName,
   };
 };
+
+// export const useCreateAppwriteUserMembership = () => {
+//   const appwriteUser = useAppwriteUserContext();
+//   const gameContext = useGameContext();
+//   const [loading, setLoading] = useState<boolean>(false);
+//   const [error, setError] = useState("");
+//   const [response, setResponse] = useState("");
+
+//   const createMembership = async () => {
+//     try {
+//       setLoading(true);
+
+//       const update = await fetch(
+//         `${config.expressEndpoint}appwrite/user/update/name`,
+//         {
+//           method: "PATCH",
+//           headers: {
+//             "Content-Type": "application/json", // Zorg ervoor dat de Content-Type wordt ingesteld
+//           },
+//           body: JSON.stringify({
+//             teamId: gameContext.game?.code, // SHOULD ALWAYS EQUAL GAMECODE!
+//             userId: appwriteUser.user?.$id,
+//           }),
+//         }
+//       );
+
+//       if (!update.ok) setError("Failed to update user");
+
+//       const data: UpdateAppwriteUserNameResponse = await update.json();
+
+//       appwriteUser.setUser(data.user);
+
+//       setResponse(data.message);
+//     } catch (err) {
+//       setResponse("Error: Could not connect to the server.");
+//     } finally {
+//       setLoading(false);
+//     }
+//   };
+
+//   return {
+//     loading,
+//     response,
+//     error,
+//     createMembership,
+//   };
+// };

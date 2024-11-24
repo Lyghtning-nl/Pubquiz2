@@ -1,4 +1,4 @@
-import { Account, Client, Databases, Users } from "node-appwrite";
+import { Account, Client, Databases, Teams, Users } from "node-appwrite";
 import config from "../../config.json";
 
 export const ENDPOINT = config.appwrite.endpoint;
@@ -13,5 +13,6 @@ const appwriteClient = new Client()
   .setSelfSigned(true);
 const appwriteDatabases = new Databases(appwriteClient);
 const appwriteUsers = new Users(appwriteClient);
+const appwriteTeams = new Teams(appwriteClient);
 
-export { appwriteClient, appwriteDatabases, appwriteUsers };
+export { appwriteClient, appwriteDatabases, appwriteUsers, appwriteTeams };

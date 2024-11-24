@@ -10,7 +10,7 @@ import {
 import { GameContext } from "./GameContext";
 import { appwriteDb } from "../appwrite/database";
 import { RealtimeDataDocument } from "../appwrite/types";
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 
 export interface RealtimeDataProps {
   realtimeData: RealtimeDataDocument | null;

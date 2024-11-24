@@ -1,35 +1,45 @@
-import { Button, LinearProgress, TextField } from "@mui/material";
+import { Alert, Button, LinearProgress, TextField } from "@mui/material";
 import {
   useGameContext,
   validateGameCodeAndReturnGame,
   ValidateGameCodeAndReturnGameReturn,
 } from "../context/GameContext";
 import { useEffect, useState } from "react";
-import { Stack } from "@mui/system";
+import { Container } from "@mui/material";
 import { useHistory } from "react-router";
 import { useCreateAppwriteUserSession } from "../hooks/appwriteApiRequest";
 import { useAppwriteUserContext } from "../context/AppwriteUserContext";
-import { IonContent, IonPage } from "@ionic/react";
+import Wrapper from "../Wrapper";
+import { TextScreen } from "../components/TextScreen";
 
 export default function EnterGame() {
   const {
-    loading: createUserAndSessionLoading,
+    loading: createUserAndSessionAndMembershipLoading,
     error,
-    createUserAndSession,
+    createUserAndSessionAndMembership,
   } = useCreateAppwriteUserSession();
   const [validationResult, setValidationResult] =
     useState<ValidateGameCodeAndReturnGameReturn | null>(null);
   const [gameCodeInput, setGamecodeInput] = useState("");
+  const [isValidating, setIsValidating] = useState(false);
   const gameContext = useGameContext();
   const appwriteUserContext = useAppwriteUserContext();
   const history = useHistory();
+
+  const globalLoading =
+    gameContext.loading ||
+    appwriteUserContext.loading ||
+    createUserAndSessionAndMembershipLoading ||
+    isValidating;
 
   const resumeGame = () => {
     history.push("/player");
   };
 
-  const validateGameCode = async () => {
+  const validateGameCodeAndCreateUser = async () => {
     if (gameCodeInput === "") return;
+
+    setIsValidating(true);
 
     const result = await validateGameCodeAndReturnGame(gameCodeInput);
 
@@ -37,12 +47,10 @@ export default function EnterGame() {
 
     if (result.valid) {
       gameContext.setGame(result.game);
-
-      await createUserAndSession();
-
-      console.log("c");
-
+      await createUserAndSessionAndMembership(gameCodeInput);
       history.push("/player");
+    } else {
+      setIsValidating(false);
     }
   };
 
@@ -50,7 +58,7 @@ export default function EnterGame() {
     if (gameContext.game !== null && appwriteUserContext.user !== null) {
       resumeGame();
     } else {
-      validateGameCode();
+      validateGameCodeAndCreateUser();
     }
   };
 
@@ -59,36 +67,42 @@ export default function EnterGame() {
       setGamecodeInput(gameContext.game.code);
   }, [gameContext]);
 
-  if (
-    gameContext.loading ||
-    appwriteUserContext.loading ||
-    createUserAndSessionLoading
-  ) {
+  if (globalLoading) {
     return <LinearProgress />;
   }
 
   return (
-    <IonPage>
-      <IonContent fullscreen>
-        <Stack>
-          <TextField
-            label="Game code"
-            value={gameCodeInput}
-            onChange={(e) => setGamecodeInput(e.target.value)}
-            error={!!validationResult && !validationResult.valid}
-            helperText={validationResult && validationResult?.message}
-            disabled={gameContext?.game !== null}
-          />
+    <Wrapper>
+      <TextScreen
+        h1="Welkom bij PubQuiz 2.0! 👋"
+        h3="Om te beginnen vul je hier hieronder jouw Game Code in."
+      >
+        <TextField
+          label="Game code"
+          value={gameCodeInput}
+          onChange={(e) => setGamecodeInput(e.target.value)}
+          error={!!validationResult && !validationResult.valid}
+          helperText={validationResult && validationResult?.message}
+          disabled={gameContext?.game !== null || isValidating}
+        />
 
-          <Button variant="contained" onClick={() => handleSubmit()}>
-            {gameContext.game !== null ? "Verder spelen" : "Naar binnen!"}
-          </Button>
+        <Button
+          variant="contained"
+          onClick={() => handleSubmit()}
+          disabled={isValidating}
+        >
+          {gameContext.game !== null ? "Verder spelen" : "Naar binnen!"}
+        </Button>
 
-          {gameContext.game !== null
-            ? "Je hebt al een sessie!"
-            : "Vul een gamecode in om te beginnen"}
-        </Stack>
-      </IonContent>
-    </IonPage>
+        {gameContext.game !== null && (
+          <Container maxWidth="sm" sx={{ py: 10 }}>
+            <Alert severity="success">
+              Je hebt al een actieve sessie in kamer
+              <strong> {gameContext.game?.code}.</strong>
+            </Alert>
+          </Container>
+        )}
+      </TextScreen>
+    </Wrapper>
   );
 }

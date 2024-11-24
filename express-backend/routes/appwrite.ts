@@ -1,7 +1,8 @@
 import { Router, Request, Response } from "express";
 import { ID, Models } from "node-appwrite";
-import { appwriteUsers } from "../appwrite/config";
+import { appwriteTeams, appwriteUsers } from "../appwrite/config";
 import {
+  CreateAppwriteUserMembershipResponse,
   CreateAppwriteUserResponse,
   UpdateAppwriteUserNameResponse,
 } from "../../src/appwrite/types";
@@ -11,9 +12,18 @@ const router = Router();
 router.post(
   "/user/create",
   async (req: Request, res: Response<CreateAppwriteUserResponse>) => {
+    const { teamId } = req.body;
+
     try {
       const user: Models.User<Models.Preferences> = await appwriteUsers.create(
         ID.unique()
+      );
+
+      const team: Models.Membership = await appwriteTeams.createMembership(
+        teamId,
+        [],
+        undefined,
+        user.$id
       );
 
       const token: Models.Token = await appwriteUsers.createToken(user.$id);
@@ -21,6 +31,7 @@ router.post(
       res.status(200).json({
         message: "Session created successfully",
         user,
+        team,
         token,
       });
     } catch (error: any) {

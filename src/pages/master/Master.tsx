@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { appwriteDb } from "../../appwrite/database";
 import { CanvasViewer } from "../../components/Canvas";
 import { AnswerDocument } from "../../appwrite/types";
-import { Box } from "@mui/system";
+import { Box } from "@mui/material";
 import { IconButton } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 import { Query } from "appwrite";
