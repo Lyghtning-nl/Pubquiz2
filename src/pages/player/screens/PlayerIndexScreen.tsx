@@ -3,7 +3,7 @@ import { TextScreen } from "../../../components/TextScreen";
 import { useAppwriteUserContext } from "../../../context/AppwriteUserContext";
 import { SetDisplayName } from "../../../components/player/SetDisplayName";
 
-export function PlayerIndex() {
+export function PlayerIndexScreen() {
   const { user, loading } = useAppwriteUserContext();
 
   if (loading) return <LinearProgress />;

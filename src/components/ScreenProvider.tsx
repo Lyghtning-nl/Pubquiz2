@@ -2,11 +2,13 @@ import { UserTypes } from "../appwrite/types";
 import { useGameContext } from "../context/GameContext";
 import { useEffect } from "react";
 import { useHistory } from "react-router-dom";
-import { LinearProgress } from "@mui/material";
+import { CircularProgress, LinearProgress } from "@mui/material";
 import { useAppwriteUserContext } from "../context/AppwriteUserContext";
 import { useRealtimeDataContext } from "../context/RealtimeDataContext";
-import { PlayerIndex } from "../pages/player/screens/PlayerIndex";
-import { MasterIndex } from "../pages/master/screens/MasterIndex";
+import { PlayerIndexScreen } from "../pages/player/screens/PlayerIndexScreen";
+import { MasterIndexScreen } from "../pages/master/screens/MasterIndexScreen";
+import { GenericIntroScreen } from "../pages/generic/screens/GenericIntroScreen";
+import { CenterIndexScreen } from "../pages/center/screens/CenterIndexScreen";
 
 type ScreenProviderProps = {
   userType: UserTypes;
@@ -36,18 +38,20 @@ export default function ScreenProvider({ userType }: ScreenProviderProps) {
   if (!gameAndUserValid) return null;
 
   return loading ? (
-    <LinearProgress />
+    <CircularProgress />
   ) : (
     (() => {
       switch (userType) {
         case "player":
-          if (currentScreen === "index") return <PlayerIndex />;
+          if (currentScreen === "index") return <PlayerIndexScreen />;
+          if (currentScreen === "intro") return <GenericIntroScreen />;
           break;
         case "center":
-          // return <Center />;
+          if (currentScreen === "index") return <CenterIndexScreen />;
+          if (currentScreen === "intro") return <GenericIntroScreen />;
           break;
         case "master":
-          if (currentScreen === "index") return <MasterIndex />;
+          if (currentScreen === "index") return <MasterIndexScreen />;
         default:
           return null;
       }

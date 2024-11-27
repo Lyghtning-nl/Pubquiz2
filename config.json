@@ -1,9 +1,19 @@
 {
-  "expressEndpoint": "https://192.168.2.15:8000/",
+  "expressEndpoint": "http://192.168.16.55:8000/",
   "appwrite": {
-    "endpointTEST": "https://192.168.92.9:4200/v1",
-    "endpoint": "https://192.168.2.15:4200/v1",
+    "endpointTEST": "http://192.168.92.9/v1",
+    "endpoint": "http://192.168.16.55/v1",
     "projectId": "672a75920004dd1982c6",
     "databaseId": "pubquiz"
+  },
+
+  "config2": {
+    "expressEndpoint": "https://192.168.2.15:8000/",
+    "appwrite": {
+      "endpointTEST": "https://192.168.92.9:4200/v1",
+      "endpoint": "https://192.168.2.15:4200/v1",
+      "projectId": "672a75920004dd1982c6",
+      "databaseId": "pubquiz"
+    }
   }
 }
