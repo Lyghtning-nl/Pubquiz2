@@ -1,7 +1,6 @@
 import {
   ReactNode,
   createContext,
-  useCallback,
   useContext,
   useEffect,
   useState,
@@ -68,9 +67,10 @@ export function RealtimeDataContextProvider({
   const setRealtimeData = (realtimeData: RealtimeDataProps["realtimeData"]) => {
     if (realtimeData !== null) {
       setRealtimeDataState(realtimeData);
+      
       appwriteDb.realtime_data.update(realtimeData?.$id, {
         countdown_timer_active: realtimeData.countdown_timer_active,
-        question_index: realtimeData.question_index,
+        question_id: realtimeData.question_id,
         round_index: realtimeData.round_index,
         screen: realtimeData.screen,
       });
@@ -85,9 +85,6 @@ export function RealtimeDataContextProvider({
 
   return (
     <RealtimeDataContext.Provider value={contextValue}>
-      <Box sx={{ position: "absolute", right: 15 }}>
-        {realtimeData?.question_index}
-      </Box>
       {children}
     </RealtimeDataContext.Provider>
   );

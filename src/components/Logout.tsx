@@ -1,12 +1,10 @@
 import { useAppwriteUserContext } from "../context/AppwriteUserContext";
 import { useHistory } from "react-router";
 import { appwriteAccount } from "../appwrite/config";
-import {
-  GAME_CONTEXT_LOCAL_STORAGE_KEY,
-  useGameContext,
-} from "../context/GameContext";
+import { useGameContext } from "../context/GameContext";
+import { Button } from "@mui/material";
 
-export const useLogout = () => {
+export const Logout = () => {
   const appwriteUserContext = useAppwriteUserContext();
   const gameContext = useGameContext();
   const history = useHistory();
@@ -26,5 +24,15 @@ export const useLogout = () => {
     }
   };
 
-  return logout;
+  return (
+    <Button
+      color="error"
+      variant="contained"
+      size="small"
+      onClick={logout}
+      sx={{ position: "absolute", bottom: 15, left: 15, zIndex: 5 }}
+    >
+      Uitloggen
+    </Button>
+  );
 };

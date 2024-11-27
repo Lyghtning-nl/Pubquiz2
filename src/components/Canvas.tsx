@@ -13,6 +13,7 @@ import {
   ReactSketchCanvasRef,
 } from "react-sketch-canvas";
 import { appwriteDb } from "../appwrite/database";
+import { AnswerDocument } from "../appwrite/types";
 
 export const CanvasInput = () => {
   const theme = useTheme();
@@ -25,7 +26,7 @@ export const CanvasInput = () => {
       input_type: "Canvas",
       question_id: "1",
       content: JSON.stringify(drawing),
-    });
+    } as AnswerDocument);
   };
 
   return (

@@ -4,11 +4,13 @@ export type AnswerDocument = Models.Document & {
   input_type: "Keyboard" | "Canvas";
   content: string;
   question_id: string;
+  user_id: string;
+  correct: boolean;
 };
 
 export type RealtimeDataDocument = Models.Document & {
   countdown_timer_active: boolean;
-  question_index: number;
+  question_id: string;
   round_index: number;
   screen: "index" | "intro" | "arena" | "summary";
 };

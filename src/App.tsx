@@ -40,6 +40,9 @@ import { useEffect } from "react";
 import { StatusBar } from "@capacitor/status-bar";
 import { Capacitor } from "@capacitor/core";
 import { ContextProviders } from "./ContextProviders";
+import Player from "./pages/player/Player";
+import Center from "./pages/center/Center";
+import Master from "./pages/master/Master";
 
 setupIonicReact({
   swipeBackEnabled: false,
@@ -66,17 +69,17 @@ export default function App() {
           </Route>
           <Route exact path="/player">
             <ContextProviders>
-              <ScreenProvider userType="player" />
+              <Player />
             </ContextProviders>
           </Route>
           <Route exact path="/center">
             <ContextProviders>
-              <ScreenProvider userType="center" />
+              <Center />
             </ContextProviders>
           </Route>
           <Route exact path="/master">
             <ContextProviders>
-              <ScreenProvider userType="master" />
+              <Master />
             </ContextProviders>
           </Route>
           <Route exact path="/sonos">

@@ -3,23 +3,19 @@ import { useState } from "react";
 import { TextScreen } from "../../../components/TextScreen";
 import { useRealtimeDataContext } from "../../../context/RealtimeDataContext";
 import { UserCardList } from "../../../components/player/UserCardList";
+import { useUpdateRealtimeData } from "../../../hooks/useUpdateRealtimeData";
 
 export function MasterIndexScreen() {
   const { setRealtimeData, realtimeData } = useRealtimeDataContext();
   const [activeUserCount, setActiveUserCount] = useState(0);
+  const update = useUpdateRealtimeData();
 
   const startGame = () => {
-    if (realtimeData) {
-      setRealtimeData({
-        ...realtimeData,
-        screen: "arena",
-      });
-    }
+    update("screen", "intro");
   };
 
   return (
     <TextScreen h1="QuizMaster" h3="Zo. Dus jij bent de QuizMaster? 👋">
-      {activeUserCount}
       {activeUserCount > 1 && (
         <Typography variant="body1">
           Dit is het zooitje ongeregeld waarmee jij het spel kunt gaan starten

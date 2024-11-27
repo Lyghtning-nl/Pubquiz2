@@ -9,6 +9,9 @@ import { PlayerIndexScreen } from "../pages/player/screens/PlayerIndexScreen";
 import { MasterIndexScreen } from "../pages/master/screens/MasterIndexScreen";
 import { GenericIntroScreen } from "../pages/generic/screens/GenericIntroScreen";
 import { CenterIndexScreen } from "../pages/center/screens/CenterIndexScreen";
+import { MasterIntroScreen } from "../pages/master/screens/MasterIntroScreen";
+import { PlayerArenaScreen } from "../pages/player/screens/PlayerArenaScreen";
+import { CenterArenaScreen } from "../pages/center/screens/CenterArenaScreen";
 
 type ScreenProviderProps = {
   userType: UserTypes;
@@ -45,13 +48,16 @@ export default function ScreenProvider({ userType }: ScreenProviderProps) {
         case "player":
           if (currentScreen === "index") return <PlayerIndexScreen />;
           if (currentScreen === "intro") return <GenericIntroScreen />;
+          if (currentScreen === "arena") return <PlayerArenaScreen />;
           break;
         case "center":
           if (currentScreen === "index") return <CenterIndexScreen />;
           if (currentScreen === "intro") return <GenericIntroScreen />;
+          if (currentScreen === "arena") return <CenterArenaScreen />;
           break;
         case "master":
           if (currentScreen === "index") return <MasterIndexScreen />;
+          if (currentScreen === "intro") return <MasterIntroScreen />;
         default:
           return null;
       }

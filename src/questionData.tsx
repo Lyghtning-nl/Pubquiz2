@@ -1,3 +1,5 @@
+export const DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS = 30;
+
 export type QuestionData = {
   [key: number]: QuestionDataOptions;
 };
@@ -8,7 +10,7 @@ export type QuestionDataOptions = {
   audio?: string;
   image?: string;
   correct?: string;
-  type?: string;
+  type?: "multi";
   options?: Record<string, string>;
   countdown?: number;
   disableCountdownMusic?: boolean;

@@ -37,7 +37,8 @@
     "react-dom": "^18.2.0",
     "react-router": "^5.3.4",
     "react-router-dom": "^5.3.4",
-    "react-sketch-canvas": "^6.2.0"
+    "react-sketch-canvas": "^6.2.0",
+    "@lottiefiles/react-lottie-player": "^3.5.3"
   },
   "devDependencies": {
     "@capacitor/cli": "6.1.2",
