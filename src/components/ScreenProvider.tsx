@@ -58,6 +58,7 @@ export default function ScreenProvider({ userType }: ScreenProviderProps) {
         case "master":
           if (currentScreen === "index") return <MasterIndexScreen />;
           if (currentScreen === "intro") return <MasterIntroScreen />;
+        // if (currentScreen === "arena") return <MasterArenaScreen />;
         default:
           return null;
       }

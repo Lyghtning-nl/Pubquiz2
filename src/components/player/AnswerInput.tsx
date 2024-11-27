@@ -1,10 +1,6 @@
-import { Cancel, CheckCircle } from "@mui/icons-material";
 import {
-  alpha,
   Box,
   Button,
-  CircularProgress,
-  Grow,
   LinearProgress,
   LinearProgressProps,
   Stack,
@@ -21,72 +17,8 @@ import { useCurrentQuestion } from "../../hooks/useCurrentQuestion";
 import { appwriteDb } from "../../appwrite/database";
 import { AnswerDocument } from "../../appwrite/types";
 import { useAppwriteUserContext } from "../../context/AppwriteUserContext";
+import { CorrectnessAnimation } from "./answer/CorrectnessAnimation";
 import { Query } from "appwrite";
-
-const CorrectnessAnimation = (props: {
-  correct: boolean | null;
-  correctAnswer: string;
-}) => {
-  const { correct, correctAnswer } = props;
-  const [visible, setVisible] = useState(true);
-
-  useEffect(() => {
-    setVisible(true);
-
-    const timeout = setTimeout(() => {
-      setVisible(false);
-    }, 5000);
-
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [correct]);
-
-  const getIcon = (): any => {
-    if (correct)
-      return (
-        <CheckCircle sx={(theme) => ({ fill: theme.palette.success.main })} />
-      );
-    if (!correct)
-      return <Cancel sx={(theme) => ({ fill: theme.palette.error.main })} />;
-  };
-
-  return (
-    <Box
-      sx={(theme) => ({
-        zIndex: 5,
-        background: alpha(theme.palette.background.paper, 0.7),
-        backdropFilter: "blur(10px)",
-        borderRadius: theme.shape.borderRadius,
-        boxShadow: theme.shadows[5],
-        position: "fixed",
-        top: "50%",
-        left: "50%",
-        transform: "translate(-50%, -50%)",
-        display: `${visible ? "block" : "none"}`,
-      })}
-    >
-      <Grow
-        in={visible}
-        style={{
-          transformOrigin: "center",
-          width: "80vw",
-          height: "80vw",
-        }}
-      >
-        {getIcon()}
-      </Grow>
-      <Box
-        sx={{
-          padding: 2,
-          textAlign: "center",
-        }}
-      >
-        <Typography variant="h4">&quot;{correctAnswer}&quot;</Typography>
-      </Box>
-    </Box>
-  );
-};
 
 export type AnswerInputTypeProps = {
   locked: boolean;
@@ -98,41 +30,57 @@ export type AnswerInputTypeProps = {
 export function AnswerInput() {
   const currentQuestion = useCurrentQuestion();
   const { user } = useAppwriteUserContext();
-
-  const [answerDocumentId, setAnswerDocumentId] = useState<string | null>(null);
-
   const [answerDocument, setAnswerDocument] = useState<AnswerDocument | null>(
     null
   );
+  const [checkExistingAnswerLoading, setCheckExistingAnswerLoading] =
+    useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
   const [locked, setLocked] = useState(false);
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(false);
   const [correctness, setCorrectness] = useState<boolean | null>(null);
 
-  // const [loading, updateUserAnswers] = useUpdateUserAnswersInRtdb();
-  // const [userAnswerFields] = useOnValueActiveUserLiveQuestionIndexAnswer();
   const { realtimeData } = useRealtimeDataContext();
 
   useEffect(() => {
-    if (!answerDocumentId) return;
+    const checkExistingAnswer = async () => {
+      if (realtimeData !== null && user !== null) {
+        setCheckExistingAnswerLoading(true);
+
+        const existingAnswer = await appwriteDb.answers.list([
+          Query.equal("question_id", realtimeData.question_id),
+          Query.equal("user_id", user.$id),
+        ]);
+
+        if (existingAnswer.total > 0) {
+          setAnswerDocument(existingAnswer.documents[0] as AnswerDocument);
+        }
+
+        setCheckExistingAnswerLoading(false);
+      }
+    };
+
+    checkExistingAnswer();
+  }, [realtimeData, user]);
+
+  useEffect(() => {
+    if (answerDocument === null) return;
+
+    setLocked(true);
+    setAnswer(answerDocument.content);
+    setCorrectness(answerDocument.correct);
 
     const unsubscribe = appwriteDb.answers.subscribe((response) => {
       setAnswerDocument(response.payload as AnswerDocument);
-    }, `.documents.${answerDocumentId}`);
+    }, `.documents.${answerDocument.$id}`);
 
     return () => unsubscribe();
-  }, [answerDocumentId]);
-
-  useEffect(() => {
-    if (answerDocument !== null) {
-      setLocked(true);
-      setAnswer(answerDocument.content);
-      setCorrectness(answerDocument.correct);
-    }
   }, [answerDocument]);
 
   const handleSubmit = (countdownEnded: boolean = false) => {
+    if (countdownEnded && answerDocument !== null) return; //Countdown ended, but answer already given
+
     setSubmitLoading(true);
 
     let finalAnswer = answer;
@@ -149,7 +97,7 @@ export function AnswerInput() {
         user_id: user?.$id,
       } as AnswerDocument)
       .then((response) => {
-        setAnswerDocumentId(response.$id);
+        setAnswerDocument(response as AnswerDocument);
         setLocked(true);
       })
       .finally(() => setSubmitLoading(false));
@@ -216,16 +164,21 @@ export function AnswerInput() {
             type="submit"
             size="large"
             variant="contained"
-            disabled={answer.length === 0 || locked || submitLoading}
+            disabled={
+              answer.length === 0 ||
+              locked ||
+              submitLoading ||
+              checkExistingAnswerLoading
+            }
             onClick={() => handleSubmit()}
           >
-            {!submitLoading && !locked && (
+            {!submitLoading && !checkExistingAnswerLoading && !locked && (
               <>
                 Antwoord verzenden <SendIcon sx={{ ml: 2 }} />
               </>
             )}
 
-            {!submitLoading && locked && (
+            {!submitLoading && !checkExistingAnswerLoading && locked && (
               <>
                 Antwoord verzonden <CheckIcon sx={{ ml: 2 }} />
               </>
