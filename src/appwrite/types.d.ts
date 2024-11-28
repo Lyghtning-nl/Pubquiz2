@@ -19,7 +19,7 @@ export type GameDocument = Models.Document & {
   code: string;
 };
 
-export type UserTypes = "player" | "center" | "master" | "generic";
+export type UserTypes = "player" | "center" | "master";
 
 // Backend response type
 export interface CreateAppwriteUserResponse {

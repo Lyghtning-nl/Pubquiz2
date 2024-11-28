@@ -71,11 +71,18 @@ export function AnswerInput() {
     setAnswer(answerDocument.content);
     setCorrectness(answerDocument.correct);
 
-    const unsubscribe = appwriteDb.answers.subscribe((response) => {
-      setAnswerDocument(response.payload as AnswerDocument);
-    }, `.documents.${answerDocument.$id}`);
+    // Alleen subscriben als $id aanwezig is
+    if (answerDocument.$id) {
+      const unsubscribe = appwriteDb.answers.subscribe((response) => {
+        setAnswerDocument(response.payload as AnswerDocument);
+      }, `.documents.${answerDocument.$id}`);
 
-    return () => unsubscribe();
+      // Cleanup functie om te unsubscriben
+      return () => unsubscribe();
+    }
+
+    // Cleanup voor het geval er niets gesubscribed is
+    return () => {};
   }, [answerDocument]);
 
   const handleSubmit = (countdownEnded: boolean = false) => {

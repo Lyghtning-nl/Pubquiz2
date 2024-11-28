@@ -33,7 +33,7 @@ export default function EnterGame() {
     isValidating;
 
   const resumeGame = () => {
-    history.push("/player");
+    history.replace("/player");
   };
 
   const validateGameCodeAndCreateUser = async () => {
@@ -48,7 +48,7 @@ export default function EnterGame() {
     if (result.valid) {
       gameContext.setGame(result.game);
       await createUserAndSessionAndMembership(gameCodeInput);
-      history.push("/player");
+      history.replace("/player");
     } else {
       setIsValidating(false);
     }

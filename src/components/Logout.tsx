@@ -18,7 +18,7 @@ export const Logout = () => {
       appwriteUserContext.setUser(null);
       gameContext.setGame(null);
 
-      history.push("/");
+      history.replace("/");
     } catch (error) {
       console.error("Logout failed", error);
     }

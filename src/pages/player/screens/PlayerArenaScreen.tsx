@@ -48,7 +48,7 @@ export function PlayerArenaScreen() {
           bgcolor: "background.paper",
         })}
       >
-        {realtimeDataContext && <AnswerInput />}
+        {realtimeDataContext && <AnswerInput key={realtimeDataContext.realtimeData?.question_id} />}
       </Box>
     </Stack>
   );

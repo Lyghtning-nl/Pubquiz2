@@ -14,11 +14,7 @@ export function SetDisplayName() {
     updateUserName(displayName);
   };
 
-  if (loading) return (
-    <>Loading display name
-      <LinearProgress />
-    </>
-  );
+  if (loading) return <LinearProgress />;
 
   return (
     <TextScreen
