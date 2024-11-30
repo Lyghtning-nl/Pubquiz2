@@ -1,7 +1,7 @@
 {
-  "expressEndpoint": "http://192.168.2.15:8000/",
+  "expressEndpoint": "https://192.168.2.15:8000/",
   "appwrite": {
-    "endpoint": "http://192.168.2.15/v1",
+    "endpoint": "https://192.168.2.15:4200/v1",
     "projectId": "672a75920004dd1982c6",
     "databaseId": "pubquiz"
   },
@@ -9,7 +9,7 @@
   "config2-infratel": {
     "expressEndpoint": "http://192.168.16.55:8000/",
     "appwrite": {
-      "endpoint": "http://192.168.16.55/v1",
+    "endpoint": "http://192.168.16.55/v1",
       "projectId": "672a75920004dd1982c6",
       "databaseId": "pubquiz"
     }
@@ -17,7 +17,15 @@
   "config3-https-home": {
     "expressEndpoint": "https://192.168.2.15:8000/",
     "appwrite": {
-      "endpoint": "https://192.168.2.15:4200//v1",
+      "endpoint": "https://192.168.2.15:4200/v1",
+      "projectId": "672a75920004dd1982c6",
+      "databaseId": "pubquiz"
+    }
+  },
+  "config4-http-home": {
+    "expressEndpoint": "http://192.168.2.15:8000/",
+    "appwrite": {
+      "endpoint": "http://192.168.2.15/v1",
       "projectId": "672a75920004dd1982c6",
       "databaseId": "pubquiz"
     }

@@ -32,7 +32,6 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 
-import ScreenProvider from "./components/ScreenProvider";
 import EnterGame from "./pages/EnterGame";
 
 import Sonos from "./pages/Sonos";
@@ -43,6 +42,7 @@ import { ContextProviders } from "./ContextProviders";
 import Player from "./pages/player/Player";
 import Center from "./pages/center/Center";
 import Master from "./pages/master/Master";
+import Snowfall from "react-snowfall";
 
 setupIonicReact({
   swipeBackEnabled: false,
@@ -60,6 +60,17 @@ export default function App() {
 
   return (
     <IonApp>
+      <Snowfall
+        snowflakeCount={250}
+        speed={[0.5, 0.7]}
+        style={{
+          position: "fixed",
+          width: "100vw",
+          height: "100vh",
+          zIndex: 2,
+          opacity: 0.5,
+        }}
+      />
       <IonReactRouter>
         <IonRouterOutlet>
           <Route exact path="/">

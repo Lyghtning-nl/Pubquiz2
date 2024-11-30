@@ -16,7 +16,7 @@ export function MasterIndexScreen() {
 
   return (
     <TextScreen h1="QuizMaster" h3="Zo. Dus jij bent de QuizMaster? 👋">
-      {activeUserCount > 1 && (
+      {activeUserCount > 0 && (
         <Typography variant="body1">
           Dit is het zooitje ongeregeld waarmee jij het spel kunt gaan starten
           👇

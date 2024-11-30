@@ -12,16 +12,18 @@ export const Logout = () => {
   const logout = async () => {
     if (appwriteUserContext.loading) return;
 
-    try {
-      await appwriteAccount.deleteSessions();
+    appwriteAccount
+      .deleteSessions()
+      .then(() => {
+        // Nothing to do
+      })
+      .finally(() => {
+        // Clean up in finally,to also make sure session gets reset when User is delete in Apprite. This would cause an error.
+        appwriteUserContext.setUser(null);
+        gameContext.setGame(null);
 
-      appwriteUserContext.setUser(null);
-      gameContext.setGame(null);
-
-      history.replace("/");
-    } catch (error) {
-      console.error("Logout failed", error);
-    }
+        history.replace("/");
+      });
   };
 
   return (

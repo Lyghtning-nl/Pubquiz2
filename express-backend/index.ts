@@ -3,10 +3,11 @@ import cors from "cors";
 import fs from "fs";
 import https from "https";
 import http from "http";
-import appwriteRoutes from "./routes/appwrite"; // Import de routes
-import sonosRoutes from "./routes/sonos"; // Import de routes
+import appwriteRoutes from "./routes/appwrite";
+import sonosRoutes from "./routes/sonos";
+import hueRoutes from "./routes/hue";
 
-const useHttps = false;
+const useHttps = true;
 
 const app: Application = express();
 const port = process.env.PORT || 8000;
@@ -17,6 +18,7 @@ app.use(cors());
 app.use(express.json());
 app.use("/appwrite", appwriteRoutes);
 app.use("/sonos", sonosRoutes);
+app.use("/hue", hueRoutes);
 
 if (useHttps) {
   // SSL-opties

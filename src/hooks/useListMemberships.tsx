@@ -25,7 +25,6 @@ export const useListMemberships = () => {
     }
   }, [game?.code]);
 
-  // Toevoegen van nieuwe lidmaatschappen bij subscription events
   const addMembership = useCallback((newMembership: Models.Membership) => {
     setMemberships((prevMemberships) => {
       if (!prevMemberships) return [newMembership];
@@ -39,17 +38,14 @@ export const useListMemberships = () => {
     listMemberships();
 
     const unsubscribe = appwriteClient.subscribe(`memberships`, (response) => {
-      // Neem de nieuwe membership(s) uit de response en voeg ze toe
-      const newMembership = response.payload as Models.Membership; // zorg ervoor dat de response de juiste structuur heeft
+      const newMembership = response.payload as Models.Membership;
 
       if (newMembership) {
         addMembership(newMembership);
       }
     });
 
-    return () => {
-      unsubscribe();
-    };
+    return () => unsubscribe();
   }, [game?.code, listMemberships, addMembership]);
 
   return { loading, memberships };

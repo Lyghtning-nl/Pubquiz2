@@ -6,10 +6,9 @@ import {
   useState,
 } from "react";
 
-import { GameContext } from "./GameContext";
 import { appwriteDb } from "../appwrite/database";
 import { RealtimeDataDocument } from "../appwrite/types";
-import { Box } from "@mui/material";
+import { useAppwriteUserContext } from "./AppwriteUserContext";
 
 export interface RealtimeDataProps {
   realtimeData: RealtimeDataDocument | null;
@@ -43,35 +42,51 @@ export function RealtimeDataContextProvider({
   const [realtimeData, setRealtimeDataState] =
     useState<RealtimeDataDocument | null>(null);
   const [loading, setLoading] = useState(true);
+  const { user } = useAppwriteUserContext();
 
   useEffect(() => {
-    appwriteDb.realtime_data.list().then((response) => {
-      setRealtimeDataState(response.documents[0] as RealtimeDataDocument);
+    if (!user) {
+      setRealtimeDataState(null);
       setLoading(false);
-    });
-  }, []);
+      return;
+    }
+
+    setLoading(true);
+    appwriteDb.realtime_data
+      .list()
+      .then((response) => {
+        if (response.documents.length > 0) {
+          setRealtimeDataState(response.documents[0] as RealtimeDataDocument);
+        } else {
+          setRealtimeDataState(null);
+        }
+      })
+      .catch((error) => {
+        console.error("Error fetching realtime data:", error);
+        setRealtimeDataState(null);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [user]);
 
   useEffect(() => {
-    const unsubscribeRealtimeData = appwriteDb.realtime_data.subscribe(
-      (response) => {
-        setRealtimeDataState(response.payload as RealtimeDataDocument);
-      },
-      ".documents"
-    );
+    if (!user) return;
 
-    return () => {
-      unsubscribeRealtimeData();
-    };
-  }, []);
+    const unsubscribe = appwriteDb.realtime_data.subscribe((response) => {
+      setRealtimeDataState(response.payload as RealtimeDataDocument);
+    }, ".documents");
+
+    return () => unsubscribe();
+  }, [user]);
 
   const setRealtimeData = (realtimeData: RealtimeDataProps["realtimeData"]) => {
     if (realtimeData !== null) {
       setRealtimeDataState(realtimeData);
-      
+
       appwriteDb.realtime_data.update(realtimeData?.$id, {
         countdown_timer_active: realtimeData.countdown_timer_active,
         question_id: realtimeData.question_id,
-        round_index: realtimeData.round_index,
         screen: realtimeData.screen,
       });
     }

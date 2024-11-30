@@ -16,6 +16,7 @@ import { PlayerArenaScreen } from "../pages/player/screens/PlayerArenaScreen";
 import { CenterArenaScreen } from "../pages/center/screens/CenterArenaScreen";
 import { GenericSummaryScreen } from "../pages/generic/screens/GenericSummaryScreen";
 import { TextScreen } from "./TextScreen";
+import { MasterArenaScreen } from "../pages/master/screens/MasterArenaScreen";
 
 type ScreenProviderProps = {
   userType: UserTypes;
@@ -43,6 +44,7 @@ const screenMap: ScreenMap = {
   master: {
     index: <MasterIndexScreen />,
     intro: <MasterIntroScreen />,
+    arena: <MasterArenaScreen />,
   },
 };
 
@@ -52,10 +54,6 @@ export default function ScreenProvider({ userType }: ScreenProviderProps) {
   const appwriteUserContext = useAppwriteUserContext();
   const gameContext = useGameContext();
   const history = useHistory();
-
-  if (realtimeData === null) return;
-
-  const currentScreen = realtimeData.screen;
 
   const loading =
     gameContext.loading || appwriteUserContext.loading || realtimeDataLoading;
@@ -69,11 +67,15 @@ export default function ScreenProvider({ userType }: ScreenProviderProps) {
     }
   }, [loading, gameAndUserValid, history]);
 
-  if (!gameAndUserValid) return null;
+  if (!gameAndUserValid || !realtimeData) {
+    return null;
+  }
+
+  const currentScreen = realtimeData.screen;
 
   const currentScreenComponent = screenMap[userType][currentScreen] ?? (
     <TextScreen h1="Verdwaald?" />
   );
 
-  return loading ? <CircularProgress /> : currentScreenComponent;
+  return currentScreenComponent;
 }

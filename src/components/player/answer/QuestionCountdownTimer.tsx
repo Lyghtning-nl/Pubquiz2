@@ -15,10 +15,10 @@ type QuestionCountdownTimerProps = {
 };
 
 export const QuestionCountdownTimer = (props: QuestionCountdownTimerProps) => {
-  const currentQuestion = useCurrentQuestion();
+  const { currentQuestion } = useCurrentQuestion();
   const { realtimeData } = useRealtimeDataContext();
 
-  if (realtimeData === null) return;
+  if (!realtimeData || !currentQuestion) return;
 
   return (
     <LinearWithValueLabel

@@ -48,6 +48,7 @@ export default function EnterGame() {
     if (result.valid) {
       gameContext.setGame(result.game);
       await createUserAndSessionAndMembership(gameCodeInput);
+
       history.replace("/player");
     } else {
       setIsValidating(false);
@@ -74,8 +75,8 @@ export default function EnterGame() {
   return (
     <Wrapper>
       <TextScreen
-        h1="Welkom bij PubQuiz 2.0! 👋"
-        h3="Om te beginnen vul je hier hieronder jouw Game Code in."
+        h1="🎮 Welkom bij PubQuiz 2.0! 👋"
+        h3="Om te beginnen vul je hier hieronder jouw Game Code in. "
       >
         <TextField
           label="Game code"
@@ -90,6 +91,7 @@ export default function EnterGame() {
           variant="contained"
           onClick={() => handleSubmit()}
           disabled={isValidating}
+          size="large"
         >
           {gameContext.game !== null ? "Verder spelen" : "Naar binnen!"}
         </Button>

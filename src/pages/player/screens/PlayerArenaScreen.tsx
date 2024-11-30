@@ -7,15 +7,17 @@ import { SoundBeat } from "../../../components/lottie/SoundBeat";
 import { AnswerInput } from "../../../components/player/AnswerInput";
 
 export function PlayerArenaScreen() {
-  const currentQuestion = useCurrentQuestion();
-  const realtimeDataContext = useRealtimeDataContext();
+  const { currentQuestion } = useCurrentQuestion();
+  const { realtimeData } = useRealtimeDataContext();
   const { user } = useAppwriteUserContext();
+
+  if (!currentQuestion || !realtimeData || !user) return null;
 
   return (
     <Stack sx={{ height: "100%" }}>
       <TextScreen
-        h1={user?.name ?? "..."}
-        h2={currentQuestion?.text}
+        h1={user.name ?? "..."}
+        h2={currentQuestion.text}
       ></TextScreen>
 
       <Box
@@ -34,7 +36,7 @@ export function PlayerArenaScreen() {
         })}
       >
         {currentQuestion.audio && !currentQuestion.image && <SoundBeat />}
-        {currentQuestion?.image && <img src={currentQuestion.image} alt="" />}
+        {currentQuestion.image && <img src={currentQuestion.image} alt="" />}
       </Box>
 
       <Box
@@ -48,7 +50,7 @@ export function PlayerArenaScreen() {
           bgcolor: "background.paper",
         })}
       >
-        {realtimeDataContext && <AnswerInput key={realtimeDataContext.realtimeData?.question_id} />}
+        {realtimeData && <AnswerInput key={realtimeData.question_id} />}
       </Box>
     </Stack>
   );

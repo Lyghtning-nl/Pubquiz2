@@ -93,7 +93,7 @@ export function CenterIndexScreen() {
                 {
                   label: "Alle spelers verzamelen!",
                   description:
-                    "Zonder spelers is er weinig aan. Maak groepjes, of laat ieder voor zich spelen. 🤷‍♂️ / 👨‍👦‍👦 Dat is aan jullie.",
+                    "Zonder spelers is er weinig aan. Maak groepjes, of laat ieder voor zich spelen. Dat is aan jullie.",
                   content: (
                     <Stack
                       direction="row"
@@ -136,10 +136,10 @@ export function CenterIndexScreen() {
                         </Typography>
 
                         <Box sx={{ my: 2 }}>
-                          {/* <ActiveUsersInRoom
+                          <UserCardList
+                            stackDirection="row"
                             reportActiveUserCountMethod={setActiveUserCount}
-                          /> */}
-                          <UserCardList />
+                          />
                         </Box>
 
                         {activeUserCount > 0 && (

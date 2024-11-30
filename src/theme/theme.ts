@@ -1,5 +1,6 @@
 import { createTheme } from "@mui/material";
 import { themeBaseDefaults } from "./themeDefaults";
+import { Opacity } from "@mui/icons-material";
 
 const fontSize = (from: number, to: number) =>
   breakpointVal("fontSize", from, to, themeBaseDefaults.breakpoints.values);
@@ -118,6 +119,16 @@ export const theme = createTheme({
         root: {
           ...fontSize(20, 23),
           textTransform: "none",
+        },
+
+        containedPrimary: {
+          background: "linear-gradient(135deg, #6a11cb 0%, #2575fc 100%)",
+          textShadow: "0 0 20px #fff, 0 0 30px #fff",
+
+          "&.Mui-disabled": {
+            color: "#FFF",
+            opacity: 0.5,
+          },
         },
       },
       variants: [

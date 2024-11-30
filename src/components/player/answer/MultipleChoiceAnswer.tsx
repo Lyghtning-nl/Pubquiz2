@@ -3,8 +3,10 @@ import { AnswerInputTypeProps } from "../AnswerInput";
 import { useCurrentQuestion } from "../../../hooks/useCurrentQuestion";
 
 export const MultipleChoiceAnswer = (props: AnswerInputTypeProps) => {
-  const { locked, error, answer, setAnswer } = props;
-  const q = useCurrentQuestion();
+  const { locked, setAnswer } = props;
+  const { currentQuestion: q } = useCurrentQuestion();
+
+  if (!q) return null;
 
   if (!q.options) return null;
 

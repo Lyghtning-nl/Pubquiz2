@@ -3,10 +3,6 @@ import { SonosDevice, SonosManager } from "@svrooij/sonos/lib";
 import express from "express"; // Zorg ervoor dat express wordt geïmporteerd
 
 const router = Router();
-const app = express();
-
-// Middleware om JSON-body te parseren
-app.use(express.json()); // Deze regel moet bovenaan je express-server worden toegevoegd
 
 export type ExtendedSonosDevice = {
   d: SonosDevice;

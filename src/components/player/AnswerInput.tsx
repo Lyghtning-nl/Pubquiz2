@@ -21,8 +21,12 @@ export type AnswerInputTypeProps = {
 };
 
 export function AnswerInput() {
-  const currentQuestion = useCurrentQuestion();
+  const { realtimeData } = useRealtimeDataContext();
+  const { currentQuestion } = useCurrentQuestion();
   const { user } = useAppwriteUserContext();
+
+  if (!realtimeData || !currentQuestion || !user) return null;
+
   const [answerDocument, setAnswerDocument] = useState<AnswerDocument | null>(
     null
   );
@@ -33,8 +37,6 @@ export function AnswerInput() {
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState(false);
   const [correctness, setCorrectness] = useState<boolean | null>(null);
-
-  const { realtimeData } = useRealtimeDataContext();
 
   useEffect(() => {
     const checkExistingAnswer = async () => {

@@ -2,21 +2,19 @@ import { Box, Divider, Stack } from "@mui/material";
 import { TextScreen } from "../../../components/TextScreen";
 import { SoundBeat } from "../../../components/lottie/SoundBeat";
 import { UserCardList } from "../../../components/player/UserCardList";
-import { roundTitles } from "../../../questionData";
 import { useCurrentQuestion } from "../../../hooks/useCurrentQuestion";
-import { useRealtimeDataContext } from "../../../context/RealtimeDataContext";
+import { questionData } from "../../../questionData";
 
 export function CenterArenaScreen() {
-  const currentQuestion = useCurrentQuestion();
-  const { realtimeData } = useRealtimeDataContext();
+  const { currentQuestion, round } = useCurrentQuestion();
+
+  if (!currentQuestion) return null;
 
   return (
     <Stack sx={{ height: "100%" }}>
       <TextScreen
-        h1={`Ronde ${realtimeData?.round_index} - ${
-          roundTitles[currentQuestion.round]
-        }`}
-        h2={currentQuestion?.text}
+        h1={`Ronde ${round} - ${questionData[round].title}`}
+        h2={currentQuestion.text}
       ></TextScreen>
 
       <Box
@@ -52,7 +50,6 @@ export function CenterArenaScreen() {
         }}
       >
         <UserCardList stackDirection="row" showScore />
-        {/* <ActiveUsersInRoom stackDirection="row" showScore /> */}
       </Box>
     </Stack>
   );

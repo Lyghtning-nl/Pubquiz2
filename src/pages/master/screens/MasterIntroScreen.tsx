@@ -15,8 +15,8 @@ export function MasterIntroScreen() {
     <TextScreen h1="Intro" h3="Een kleine uitleg over het spel 👨‍🏫">
       <Typography variant="body1">
         Voor jou als QuizMaster is er weinig uitleg nodig. Je hoeft alleen
-        antwoorden goed te keuren! Check bij de spelers of de uitleg duidelijk
-        en ga vervolgens de QuizArena binnen!
+        antwoorden goed te keuren en de boel aan elkaar te praten! Check bij de
+        spelers of de uitleg duidelijk en ga vervolgens de QuizArena binnen!
       </Typography>
 
       <Button onClick={() => enterArena()} variant="contained">
