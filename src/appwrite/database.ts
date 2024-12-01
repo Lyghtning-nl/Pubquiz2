@@ -5,6 +5,7 @@ import {
   COLLECTION_ID_ANSWERS,
   appwriteClient,
   COLLECTION_ID_REALTIME_DATA,
+  COLLECTION_ID_QUESTIONS,
 } from "./config";
 import { ID, RealtimeResponseEvent } from "appwrite";
 import { Models } from "appwrite";
@@ -43,6 +44,11 @@ const collections = [
     databaseId: DATABASE_ID,
     id: COLLECTION_ID_REALTIME_DATA,
     name: "realtime_data",
+  },
+  {
+    databaseId: DATABASE_ID,
+    id: COLLECTION_ID_QUESTIONS,
+    name: "questions",
   },
 ];
 

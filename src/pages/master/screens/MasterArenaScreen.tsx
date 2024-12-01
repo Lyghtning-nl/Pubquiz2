@@ -41,6 +41,7 @@ import {
   KeyboardArrowUp,
   Lightbulb,
   MusicNote,
+  Stop,
   Timer,
 } from "@mui/icons-material";
 import { useRealtimeDataContext } from "../../../context/RealtimeDataContext";
@@ -53,6 +54,10 @@ import useSound from "use-sound";
 import config from "../../../../config.json";
 import useTimer from "../../../hooks/useTimer";
 import { useUpdateRealtimeData } from "../../../hooks/useUpdateRealtimeData";
+import { usePlayOnSonos, useStopOnSonos } from "../../../hooks/sonos";
+import { useBlinkOnHue } from "../../../hooks/hue";
+
+export const USE_SONOS = true;
 
 export function MasterArenaScreen() {
   const { realtimeData } = useRealtimeDataContext();
@@ -316,9 +321,7 @@ const ValidateGivenAnswer = ({
   const [buttonState, setButtonState] = useState<boolean | null>(correct);
 
   const setCorrectness = (bool: boolean) => {
-    fetch(config.expressEndpoint + "hue/flash", {
-      method: "POST",
-    });
+    useBlinkOnHue(bool ? "green" : "red");
 
     setButtonState(bool);
 
@@ -327,7 +330,13 @@ const ValidateGivenAnswer = ({
         correct: bool,
       })
       .then(() => {
-        bool ? playFxCorrect() : playFxWrong();
+        if (USE_SONOS) {
+          bool
+            ? usePlayOnSonos("/assets/fx/correct.mp3")
+            : usePlayOnSonos("/assets/fx/wrong.mp3");
+        } else {
+          bool ? playFxCorrect() : playFxWrong();
+        }
       });
   };
 
@@ -336,7 +345,7 @@ const ValidateGivenAnswer = ({
       <ButtonGroup>
         <Button
           variant={
-            typeof buttonState == "boolean" && buttonState
+            typeof buttonState == "boolean" && buttonState === true
               ? "contained"
               : "outlined"
           }
@@ -348,7 +357,7 @@ const ValidateGivenAnswer = ({
         </Button>
         <Button
           variant={
-            typeof correct == "boolean" && !buttonState
+            typeof buttonState == "boolean" && buttonState === false
               ? "contained"
               : "outlined"
           }
@@ -373,6 +382,8 @@ const ControlBar = ({
   const update = useUpdateRealtimeData();
   const questionDataMergedKeys = Object.keys(questionDataMerged);
   const { audio: questionAudio } = currentQuestion;
+
+  const [questionAudioPlaying, setQuestionAudioPlaying] = useState(false);
 
   const [idleSoundPlaying, setIdleSoundPlaying] = useState(false);
   const [playCountdownSound, countdownSoundOptions] = useSound(
@@ -418,6 +429,7 @@ const ControlBar = ({
     setTimerActive(false);
 
     // HueController.resetScene();
+
     setIdleSoundPlaying(false);
 
     if (!currentQuestion?.audio || currentQuestion.forceCountdownMusic)
@@ -426,7 +438,11 @@ const ControlBar = ({
 
   useEffect(() => {
     if (!timerActive) {
-      countdownSoundOptions.stop();
+      if (USE_SONOS) {
+        useStopOnSonos();
+      } else {
+        countdownSoundOptions.stop();
+      }
       // HueController.brightenUp();
     } else {
       if (currentQuestion?.forceCountdownMusic || !currentQuestion?.audio) {
@@ -435,7 +451,12 @@ const ControlBar = ({
         //     DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS,
         //   currentQuestion?.overrideTargetGroupForFading ?? false
         // );
-        playCountdownSound();
+
+        if (USE_SONOS) {
+          usePlayOnSonos("/assets/fx/countdown.mp3");
+        } else {
+          playCountdownSound();
+        }
       }
     }
 
@@ -444,11 +465,28 @@ const ControlBar = ({
 
   useEffect(() => {
     if (idleSoundPlaying) {
-      playIdleSound();
+      if (USE_SONOS) {
+        usePlayOnSonos("/assets/fx/idle.wav");
+      } else {
+        playIdleSound();
+      }
     } else {
-      idleSoundOptions.stop();
+      if (USE_SONOS) {
+        useStopOnSonos();
+      } else {
+        idleSoundOptions.stop();
+      }
     }
   }, [idleSoundPlaying]);
+
+  const handlePlayQuestionAudio = (trackUri: string) => {
+    if (questionAudioPlaying) {
+      useStopOnSonos();
+    } else {
+      usePlayOnSonos(trackUri);
+    }
+    setQuestionAudioPlaying(!questionAudioPlaying);
+  };
 
   return (
     <Box
@@ -470,9 +508,28 @@ const ControlBar = ({
       {questionAudio && (
         <Stack direction="row" alignItems="center" gap={2}>
           Vraag audio
-          <audio controls src={questionAudio}>
-            <source src={questionAudio} />
-          </audio>
+          {USE_SONOS ? (
+            <>
+              <Button
+                variant="outlined"
+                onClick={() => handlePlayQuestionAudio(questionAudio)}
+              >
+                {questionAudioPlaying ? (
+                  <>
+                    <Stop /> stoppen
+                  </>
+                ) : (
+                  <>
+                    <MusicNote /> starten
+                  </>
+                )}
+              </Button>
+            </>
+          ) : (
+            <audio controls src={questionAudio}>
+              <source src={questionAudio} />
+            </audio>
+          )}
         </Stack>
       )}
 
@@ -520,12 +577,12 @@ const ControlBar = ({
         )}
       </ButtonGroup>
 
-      <IconButton
+      {/* <IconButton
         // onClick={() => HueController.resetScene()}
         disabled
       >
         <Lightbulb />
-      </IconButton>
+      </IconButton> */}
 
       <IconButton onClick={() => setIdleSoundPlaying(!idleSoundPlaying)}>
         <MusicNote />

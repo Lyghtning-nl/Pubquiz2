@@ -7,6 +7,7 @@ const DATABASE_ID = config.appwrite.databaseId;
 const COLLECTION_ID_GAMES = "games";
 const COLLECTION_ID_ANSWERS = "answers";
 const COLLECTION_ID_REALTIME_DATA = "realtime_data";
+const COLLECTION_ID_QUESTIONS = "questions";
 
 const appwriteClient = new Client()
   .setEndpoint(ENDPOINT)
@@ -24,4 +25,5 @@ export {
   COLLECTION_ID_GAMES,
   COLLECTION_ID_ANSWERS,
   COLLECTION_ID_REALTIME_DATA,
+  COLLECTION_ID_QUESTIONS,
 };

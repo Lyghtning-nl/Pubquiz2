@@ -18,9 +18,13 @@ export type GameDocument = Models.Document & {
   code: string;
 };
 
+export type QuestionDocument = Models.Document & {
+  json: string;
+  student: string;
+};
+
 export type UserTypes = "player" | "center" | "master";
 
-// Backend response type
 export interface CreateAppwriteUserResponse {
   message: string;
   user: Models.User<Models.Preferences>;

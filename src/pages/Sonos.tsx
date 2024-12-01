@@ -1,27 +1,13 @@
 import { IonContent, IonPage } from "@ionic/react";
 import config from "../../config.json";
-import { ListAllSonosDevices } from "../components/ListAllSonosDevices";
 import { Button } from "@mui/material";
-import { ENDPOINT } from "../appwrite/config";
+import { useState, useEffect } from "react";
+import { ExtendedSonosDevice } from "../../express-backend/routes/sonos";
+import { usePlayOnSonos } from "../hooks/sonos";
 
 export default function Sonos() {
   const playSound = (uri: string) => {
-    fetch(config.expressEndpoint + "sonos/play", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json", // Zorg ervoor dat de Content-Type wordt ingesteld
-      },
-      body: JSON.stringify({
-        trackUri: uri,
-      }),
-    })
-      .then((response: Response) => response.json())
-      .then((data) => {
-        console.log(data);
-      })
-      .catch((error) => {
-        console.error("Error fetching /sonos/play:", error);
-      });
+    usePlayOnSonos(uri);
   };
 
   return (
@@ -31,15 +17,51 @@ export default function Sonos() {
 
         <Button
           variant="contained"
-          onClick={() =>
-            playSound(
-              "http://192.168.2.15:5173/assets/question/steprightup.mp3"
-            )
-          }
+          onClick={() => playSound("/assets/question/duaLipa-Houdini.mp3")}
         >
           Play{" "}
         </Button>
       </IonContent>
     </IonPage>
+  );
+}
+
+function ListAllSonosDevices() {
+  const [devices, setDevices] = useState<ExtendedSonosDevice[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+
+  useEffect(() => {
+    const fetchDevices = async () => {
+      try {
+        const response = await fetch(config.expressEndpoint + "sonos/list");
+        const data = await response.json();
+
+        setDevices(data.devices);
+      } catch (error) {
+        console.error("Error fetching /sonos:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDevices();
+  }, []);
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  return (
+    <div>
+      <h3>Sonos Devices:</h3>
+      <ul>
+        {devices?.map((device, index) => (
+          <li key={index}>
+            {device.d.name} - {device.d.host} - {device.options.LEDState} -{" "}
+            {device.d.uuid} - {device.d.groupName}
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

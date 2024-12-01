@@ -1,6 +1,5 @@
 import { Router, Request, Response } from "express";
 import { SonosDevice, SonosManager } from "@svrooij/sonos/lib";
-import express from "express"; // Zorg ervoor dat express wordt geïmporteerd
 
 const router = Router();
 
@@ -11,23 +10,27 @@ export type ExtendedSonosDevice = {
   };
 };
 
+const FindRoam = async () => {
+  let Roam: SonosDevice | undefined;
+
+  const manager = new SonosManager();
+
+  await manager
+    .InitializeWithDiscovery()
+    .then(console.log)
+    .then(() => {
+      Roam = manager.Devices.find((d) => d.uuid === "RINCON_542A1BB8762C01400");
+    })
+    .catch(console.error);
+
+  return Roam;
+};
+
 router.post("/play", async (req: Request, res: Response) => {
   const { trackUri } = req.body;
 
   try {
-    let Roam: SonosDevice | undefined;
-
-    const manager = new SonosManager();
-
-    await manager
-      .InitializeWithDiscovery()
-      .then(console.log)
-      .then(() => {
-        Roam = manager.Devices.find(
-          (d) => d.uuid === "RINCON_542A1BB8762C01400"
-        );
-      })
-      .catch(console.error);
+    const Roam = await FindRoam();
 
     if (!Roam) throw new Error();
 
@@ -39,6 +42,26 @@ router.post("/play", async (req: Request, res: Response) => {
       InstanceID: 0,
       Speed: "1",
     });
+
+    res.status(200).json({
+      success: true,
+    });
+  } catch (error) {
+    console.error("Error playing track:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to play track.",
+    });
+  }
+});
+
+router.post("/stop", async (req: Request, res: Response) => {
+  try {
+    const Roam = await FindRoam();
+
+    if (!Roam) throw new Error();
+
+    Roam.Stop();
 
     res.status(200).json({
       success: true,

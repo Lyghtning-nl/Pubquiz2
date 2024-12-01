@@ -5,51 +5,52 @@ import {
   Container,
   Stack,
   Typography,
+  useTheme,
 } from "@mui/material";
-import { useContext, useEffect, useState } from "react";
-// import QRCode from "qrcode";
-// import Image from "next/image";
+import { useEffect, useState } from "react";
+import QRCode from "qrcode";
+
 import { TextScreen } from "../../../components/TextScreen";
 import VerticalLinearStepper from "../../../components/VerticalLinearStepper";
 import { useGameContext } from "../../../context/GameContext";
 import { UserCardList } from "../../../components/player/UserCardList";
 import { UserCard } from "../../../components/player/UserCard";
-// import { PAGES_URL_DIRECTORY, applicationConfig } from "@/app/config";
-// import { ActiveUsersInRoom } from "@/app/components/User/ActiveUsersInRoom";
 
 export function CenterIndexScreen() {
   const [playerQrLoading, setPlayerQrLoading] = useState(false);
-  // const [playerQrDataUrl, setPlayerQrDataUrl] = useState("");
+  const [playerQrDataUrl, setPlayerQrDataUrl] = useState("");
 
   const [masterQrLoading, setMasterQrLoading] = useState(false);
-  // const [masterQrDataUrl, setMasterQrDataUrl] = useState("");
+  const [masterQrDataUrl, setMasterQrDataUrl] = useState("");
 
   const [activeUserCount, setActiveUserCount] = useState(0);
 
   const { game } = useGameContext();
 
-  // const playerQrCodeUrl = `${applicationConfig.vercelDeploymentDomain}${PAGES_URL_DIRECTORY}join?roomcode=${useRoomContext?.room.code}`;
-  // const masterQrCodeUrl = `${applicationConfig.vercelDeploymentDomain}${PAGES_URL_DIRECTORY}join?roomcode=${useRoomContext?.room.code}&usertype=master`;
+  const playerQrCodeUrl = `<XXX>join?roomcode=${game?.code}`;
+  const masterQrCodeUrl = `<XXX>join?roomcode=${game?.code}&usertype=master`;
 
-  // useEffect(() => {
-  //   QRCode.toDataURL(playerQrCodeUrl, { width: 512 })
-  //     .then((url) => {
-  //       setPlayerQrLoading(false);
-  //       setPlayerQrDataUrl(url);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
+  useEffect(() => {
+    QRCode.toDataURL(playerQrCodeUrl, { width: 512 })
+      .then((url) => {
+        setPlayerQrLoading(false);
+        setPlayerQrDataUrl(url);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
 
-  //   QRCode.toDataURL(masterQrCodeUrl, { width: 512 })
-  //     .then((url) => {
-  //       setMasterQrLoading(false);
-  //       setMasterQrDataUrl(url);
-  //     })
-  //     .catch((err) => {
-  //       console.error(err);
-  //     });
-  // }, [useRoomContext, masterQrCodeUrl, playerQrCodeUrl]);
+    QRCode.toDataURL(masterQrCodeUrl, { width: 512 })
+      .then((url) => {
+        setMasterQrLoading(false);
+        setMasterQrDataUrl(url);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [masterQrCodeUrl, playerQrCodeUrl]);
+
+  const theme = useTheme();
 
   return (
     <TextScreen
@@ -67,25 +68,28 @@ export function CenterIndexScreen() {
                   label: "Wie wordt de QuizMaster?",
                   description: `Een quiz zonder QuizMaster is als een pizzabezorger zonder pizza. 🍕 Je hebt er weinig aan. <br/> De QuizMaster zit achter de knoppen, controleert de antwoorden en entertaint natuurlijk de spelers! <br/> En wij garanderen; de QuizMaster heeft net zoveel lol als de spelers!`,
                   content: (
-                    <Stack alignItems="center">
+                    <Stack alignItems="center" gap={2}>
                       <Alert severity="info">
                         <Typography variant="h3">
                           Uitgeruzied? Dan mag de uitverkorene hieronder de
                           QR-code scannen.
                         </Typography>
                       </Alert>
-                      {/* <Image
+                      <img
                         src={masterQrDataUrl}
-                        alt="QR Code for room"
                         width={350}
                         height={350}
-                      /> */}
+                        style={{
+                          borderRadius: theme.shape.borderRadius,
+                          boxShadow: theme.shadows[1],
+                        }}
+                      />
 
                       <Typography
                         variant="overline"
                         sx={{ textTransform: "none" }}
                       >
-                        {/* {masterQrCodeUrl} */}
+                        {masterQrCodeUrl}
                       </Typography>
                     </Stack>
                   ),
@@ -105,7 +109,7 @@ export function CenterIndexScreen() {
                         },
                       }}
                     >
-                      <Stack alignItems="center">
+                      <Stack alignItems="center" gap={2}>
                         <Alert severity="info">
                           <Typography variant="h3">
                             Scan per groep of persoon met één apparaat de
@@ -113,18 +117,21 @@ export function CenterIndexScreen() {
                           </Typography>
                         </Alert>
 
-                        {/* <Image
+                        <img
                           src={playerQrDataUrl}
-                          alt="QR Code for room"
                           width={350}
                           height={350}
-                        /> */}
+                          style={{
+                            borderRadius: theme.shape.borderRadius,
+                            boxShadow: theme.shadows[1],
+                          }}
+                        />
 
                         <Typography
                           variant="overline"
                           sx={{ textTransform: "none" }}
                         >
-                          {/* {playerQrCodeUrl} */} QR Code goes here...
+                          {playerQrCodeUrl}
                         </Typography>
                       </Stack>
 

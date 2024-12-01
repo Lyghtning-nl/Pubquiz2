@@ -26,7 +26,7 @@ export type QuestionDataOptions = {
 export const questionDataRound0: QuestionData = {
   "1": {
     text: "0. Oefenvraag - Werkt alles?",
-    image: "https://storage.googleapis.com/music-quiz/v2/testimage.jpg",
+    image: "/assets/question/testimage.jpg",
     correct: "-",
   },
 };
@@ -34,15 +34,13 @@ export const questionDataRound0: QuestionData = {
 export const questionDataRound1: QuestionData = {
   "11": {
     text: "1. Voor welke bekende serie is dit nummer geschreven?",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/illbethereforyou-friends",
+    audio: "/assets/question/illbethereforyou-friends.mp3",
     correct: "Friends",
     countdown: 60,
   },
   "12": {
     text: "2. Hoeveel inwoners telt Streefkerk bij benadering?",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/streefkerk-overview.jpg",
+    image: "/assets/question/streefkerk-overview.jpg",
     correct: "2500 (2515)",
     type: "multi",
     options: {
@@ -53,21 +51,19 @@ export const questionDataRound1: QuestionData = {
     },
   },
   "13": {
-    text: "3. Wat zeiden ze in de ballentent op 4 mei 2024 om 20:02",
-    image: "https://storage.googleapis.com/music-quiz/v2/ballentent.jpg",
-    correct: "?",
+    text: "3. Welke artiest zien we hier?",
+    image: "/assets/question/ts.jpeg",
+    correct: "Taylor Swift",
   },
   "14": {
     text: "4. Raad de titel + artiest",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/duaLipa-Houdini.mp3",
+    audio: "/assets/question/duaLipa-Houdini.mp3",
     correct: "Dua Lipa - Houdini",
     countdown: 60,
   },
   "15": {
     text: "5. Wat doet André zijn zoontje kado?",
-    audio: "https://storage.googleapis.com/music-quiz/vlieger.mp3",
-    // image: "https://storage.googleapis.com/music-quiz/vlieger-lyrics.jpg",
+    audio: "/assets/question/vlieger.mp3",
     correct: "Een vlieger",
     type: "multi",
     options: {
@@ -79,29 +75,28 @@ export const questionDataRound1: QuestionData = {
   },
   "16": {
     text: "6. Wie schilderde de Mona Lisa?",
-    image: "https://storage.googleapis.com/music-quiz/v2/monalisa.webp",
+    image: "/assets/question/monalisa.webp",
     correct: "Leonardo Da Vinci",
   },
   "17": {
     text: "7. Wat is de naam van het nummer waar deze clip bijhoort?",
-    image: "https://storage.googleapis.com/music-quiz/thriller.jpg",
+    image: "/assets/question/thriller.jpg",
     correct: "Thriller",
   },
   "18": {
     text: "8. Wie zijn de makers en wat is de titel van het afgebeelde album?",
-    image: "https://storage.googleapis.com/music-quiz/fmr.jpg",
+    image: "/assets/question/fmr.jpg",
     correct: "Fleetwood Mac - Rumors",
   },
   "19": {
     text: "9. Raad de titel + artiest",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/carelesswhisper-georgemichael",
+    audio: "/assets/question/carelesswhisper-georgemichael",
     correct: "George Michael - Careless Whisper",
     countdown: 60,
   },
   "20": {
     text: '10. Wat betekent de term "hattrick" in veel sporten?',
-    image: "https://storage.googleapis.com/music-quiz/v2/hattrick.jpg",
+    image: "/assets/question/hattrick.jpg",
     correct: "3x op rij een bijzondere actie",
   },
 };
@@ -109,32 +104,25 @@ export const questionDataRound1: QuestionData = {
 export const questionDataRound2: QuestionData = {
   "21": {
     text: "11. Raad de titel + artiest",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/rockdj-robbiewilliams",
-
+    audio: "/assets/question/rockdj-robbiewilliams",
     correct: "Rock DJ - Robbie Williams",
     countdown: 60,
   },
   "22": {
     text: "12. Welke artiest zien we hier?",
-    image: "https://storage.googleapis.com/music-quiz/v2/cardi-b.jpg",
-
+    image: "/assets/question/cardi-b.jpg",
     correct: "Cardi B",
   },
   "23": {
     text: "13. Raad de titel + artiest",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/brokenwings-mrmister",
-
+    audio: "/assets/question/brokenwings-mrmister",
     correct: "Broken Wings - Mr. Mister",
     countdown: 60,
   },
   "24": {
     text: '14. Welk nummer begint met de tekst; <br/><br/> "Ooooh. <br/><br/> You can dance <br/><br/> You can jive"<br/><br/> ...en wie zingt het?',
-
     correct: "Dancing queen - Abba",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/dancingqueen-abba",
+    audio: "/assets/question/dancingqueen-abba",
     forceCountdownMusic: true,
     countdown: 40,
     quizMasterHelpText:
@@ -142,31 +130,25 @@ export const questionDataRound2: QuestionData = {
   },
   "25": {
     text: "15. Raad de titel + artiest",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/unfaithful-rihanna",
-
+    audio: "/assets/question/unfaithful-rihanna",
     correct: "Rihanna - Unfaithful",
     countdown: 60,
   },
   "26": {
     text: "16. Welke artiest zien we hier?",
-    image: "https://storage.googleapis.com/music-quiz/v2/jennifer-lopzer.jpg",
+    image: "/assets/question/jennifer-lopzer.jpg",
     correct: "Jennifer Lopez",
   },
   "27": {
     text: "17. Raad de titel + artiest",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/notimetodie-billie",
-
+    audio: "/assets/question/notimetodie-billie",
     correct: "No time to die - Billie Eilish",
     countdown: 60,
   },
   "28": {
     text: "18. Uit welk nummer komt de tekst; <br/><br/> \"I'm like a bird, I'll only fly away<br/><br/>I don't know where my soul is\" <br/><br/> ...en wie zingt het?",
-
     correct: "I'm like a bird, I'll only fly away - Nelly Furtado",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/imlikeabird-nellyfurtado",
+    audio: "/assets/question/imlikeabird-nellyfurtado",
     forceCountdownMusic: true,
     countdown: 40,
     quizMasterHelpText:
@@ -174,137 +156,85 @@ export const questionDataRound2: QuestionData = {
   },
   "29": {
     text: "19. Wie was de leadzanger van Nirvana?",
-    image: "https://storage.googleapis.com/music-quiz/v2/nirvana.jpg",
-
+    image: "/assets/question/nirvana.jpg",
     correct: "Kurt Cobain",
   },
-  // 30: {
-  //   text: "20. Raad de titel + artiest 🎄",
-  //   audio: "https://storage.googleapis.com/music-quiz/v2/audio/snowman-sia",
-  //   round: 2,
-  //   correct: "Snowman - Sia",
-  //   countdown: 60,
-  // },
   "30": {
     text: "20. Raad de titel + artiest",
-    audio: "https://storage.googleapis.com/music-quiz/cd.m4a",
-
+    audio: "/assets/question/cd.m4a",
     correct: "The mammas and the pappas - Calofornia Dreamin",
     countdown: 60,
   },
-  // 25: {
-  //   text: "15. U2 tradt onlangs op in deze gigantische bol in Las Vegas. Wat is de naam van deze bol?",
-  //   image: "https://storage.googleapis.com/music-quiz/sphere.jpg",
-  //   correct: "The Sphere",
-  //   round: 2,
-  // },
-  // 26: {
-  //   text: "16. Raad de titel + artiest",
-  //   audio: "https://storage.googleapis.com/music-quiz/dotc.m4a",
-  //   round: 2,
-  //   correct: "Lionel Richie - Dancing on the Ceiling",
-  // },
-  // 27: {
-  //   text: "17. Wie zijn de makers en wat is de titel van het afgebeelde album?",
-  //   image: "https://storage.googleapis.com/music-quiz/fmr.jpg",
-  //   correct: "Fleetwood Mac - Rumors",
-  //   round: 2,
-  // },
-
-  // 29: {
-  //   text: "19. Welke artiest zien we hier?",
-  //   image: "https://storage.googleapis.com/music-quiz/ts.jpeg",
-  //   correct: "Taylor Swift",
-  //   round: 2,
-  // },
-  // 30: {
-  //   text: "20. Raad de titel + artiest",
-  //   audio: "https://storage.googleapis.com/music-quiz/hdiyl.m4a",
-  //   round: 2,
-  //   correct: "Bee Gees - How deep is your love",
-  // },
 };
 
 export const questionDataRound3: QuestionData = {
   "31": {
     text: "21. Vul de missende songtekst in",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/umbrella-baseballs",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/umbrella-baseballs.jpg",
+    audio: "/assets/question/umbrella-baseballs",
+    image: "/assets/question/umbrella-baseballs.jpg",
     correct: "When the sun shines, we'll shine together",
     countdown: 60,
   },
   "32": {
     text: "22. Vul de missende songtekst in",
-    image: "https://storage.googleapis.com/music-quiz/br-lyrics-queen.jpg",
-    audio: "https://storage.googleapis.com/music-quiz/bohemian.mp3",
+    image: "/assets/question/br-lyrics-queen.jpg",
+    audio: "/assets/question/bohemian.mp3",
     correct: "Scaramouche, Scaramouche, will you do the Fandango?",
     countdown: 60,
   },
   "33": {
     text: "23. Vul de missende songtekst in.",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/thelionssleep-tightfit",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/thelionssleeptonight-tightfit.jpg",
+    audio: "/assets/question/thelionssleep-tightfit",
+    image: "/assets/question/thelionssleeptonight-tightfit.jpg",
     correct: "Ah Wimoweh ah wimoweh ah wimoweh ah wimoweh",
     countdown: 60,
   },
   "34": {
     text: "24. Vul de missende songtekst in",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/shapeofyou-edsheeran",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/shapeofyou-edsheeran.jpg",
+    audio: "/assets/question/shapeofyou-edsheeran",
+    image: "/assets/question/shapeofyou-edsheeran.jpg",
     correct: "We push and pull like a magnet do",
     countdown: 60,
   },
   "35": {
     text: "25. Vul de missende songtekst in",
-    audio: "https://storage.googleapis.com/music-quiz/houmevast.mp3",
-    image: "https://storage.googleapis.com/music-quiz/hou-me-vast-lyrics.jpg",
+    audio: "/assets/question/houmevast.mp3",
+    image: "/assets/question/hou-me-vast-lyrics.jpg",
     correct: "En bij jou zijn, is dan alles wat ik wil",
     countdown: 60,
   },
   "36": {
     text: "26. Vul de missende songtekst in",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/islandsinthestream-dollyparton",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/islandsinthestream-dollyparton.jpg",
+    audio: "/assets/question/islandsinthestream-dollyparton",
+    image: "/assets/question/islandsinthestream-dollyparton.jpg",
     correct: "Makin love with each other, ah ah.",
     countdown: 60,
   },
   "37": {
     text: "27. Vul de missende songtekst in",
-    audio: "https://storage.googleapis.com/music-quiz/mallebabbe.mp3",
-    image: "https://storage.googleapis.com/music-quiz/mb-lyrics.jpg",
+    audio: "/assets/question/mallebabbe.mp3",
+    image: "/assets/question/mb-lyrics.jpg",
     correct: "Lekker stuk, malle meid, lekker dier van pleizer",
     countdown: 60,
   },
   "38": {
     text: "28. Vul de missende songtekst in",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/heartwillgoone-celinedion",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/heartwillgoone-celinedion.jpg",
+    audio: "/assets/question/heartwillgoone-celinedion",
+    image: "/assets/question/heartwillgoone-celinedion.jpg",
     correct: "You're here, there's nothing I fear",
     countdown: 60,
   },
   "39": {
     text: "29. Vul de missende songtekst in",
-    audio: "https://storage.googleapis.com/music-quiz/steprightup.mp3",
-    image: "https://storage.googleapis.com/music-quiz/sru-lyrics.jpg",
+    audio: "/assets/question/steprightup.mp3",
+    image: "/assets/question/sru-lyrics.jpg",
     correct: "Rock this crazy world i'm living in",
     countdown: 60,
   },
   "40": {
     text: "30. Vul de missende songtekst in",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/allstart-smashmout",
-    image:
-      "https://storage.googleapis.com/music-quiz/v2/allstart-smashmout.jpg",
+    audio: "/assets/question/allstart-smashmout",
+    image: "/assets/question/allstart-smashmout.jpg",
     correct:
       "You'll never know if you don't go. You'll never shine if you don't glow.",
     countdown: 60,
@@ -315,38 +245,29 @@ export const questionDataRound4: QuestionData = {
   "41": {
     text: "31. Wie wordt beschouwd als de snelste man ter wereld?",
     correct: "Usain Bolt",
-    image: "https://storage.googleapis.com/music-quiz/v2/speed-blur.webp",
+    image: "/assets/question/speed-blur.webp",
   },
   "42": {
     text: "32. Raad de titel + artiest",
     correct: "Afscheid - Volumia",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/afscheid-volumia",
+    audio: "/assets/question/afscheid-volumia",
     countdown: 60,
   },
-
-  // 43: {
-  //   text: "33. Onder welke naam is de Dotterbloem, vanwege het overmatige alcoholgebruik, ook wel bekend?",
-  //   image: "https://storage.googleapis.com/music-quiz/v2/dotterbloem.jpg",
-  //   correct: "De Zotterbloem",
-  //   round: 4,
-  // },
   "43": {
     text: "33. U2 tradt onlangs op in deze gigantische bol in Las Vegas. Wat is de naam van deze bol?",
-    image: "https://storage.googleapis.com/music-quiz/sphere.jpg",
+    image: "/assets/question/sphere.jpg",
     correct: "The Sphere",
   },
   "44": {
     text: "34. Raad de titel + artiest",
     correct: "Cruel Summer - Bananarama",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/cruelsummer-bananarama",
+    audio: "/assets/question/cruelsummer-bananarama",
     countdown: 60,
   },
   "45": {
     text: '35. Welke rapper scoorde een grote hit met het nummer "Rap God"?',
     correct: "Eminem",
-    image: "https://storage.googleapis.com/music-quiz/v2/rapscene.jpg",
+    image: "/assets/question/rapscene.jpg",
     type: "multi",
     options: {
       a: "Jay-Z",
@@ -358,15 +279,14 @@ export const questionDataRound4: QuestionData = {
   "46": {
     text: "36. Raad de titel + artiest",
     correct: "Son Mieux - Multicolor",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/multicolor-sonmieux",
+    audio: "/assets/question/multicolor-sonmieux",
     countdown: 60,
   },
   "47": {
     text: "37. Wat is het tegenovergestelde van worteltrekken?",
     correct: "Kwadrateren",
     type: "multi",
-    image: "https://storage.googleapis.com/music-quiz/v2/worteldelen.png",
+    image: "/assets/question/worteldelen.png",
     options: {
       a: "Delen",
       b: "Exponentiëren",
@@ -376,15 +296,14 @@ export const questionDataRound4: QuestionData = {
   },
   "48": {
     text: "38. Een echt 'Oh ja!'-intro, maar van welke artiest en bijhorend nummer?",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/fireflies-owlcity",
+    audio: "/assets/question/fireflies-owlcity",
     correct: "Fireflies - Owl City",
     countdown: 60,
   },
   "49": {
     text: "39. Wie is de jongste Formule 1-wereldkampioen ooit?",
     correct: "Sebastian Vettel",
-    image: "https://storage.googleapis.com/music-quiz/v2/f1.jpg",
+    image: "/assets/question/f1.jpg",
     type: "multi",
     options: {
       a: "Lewis Hamilton",
@@ -395,8 +314,7 @@ export const questionDataRound4: QuestionData = {
   },
   "50": {
     text: "40. Welk nummer (+artiest) wordt hier verkeerd om afgespeeld?",
-    audio:
-      "https://storage.googleapis.com/music-quiz/v2/audio/happynewyear-abba",
+    audio: "/assets/question/happynewyear-abba",
     correct: "Happy new Year - Abba",
     countdown: 60,
   },

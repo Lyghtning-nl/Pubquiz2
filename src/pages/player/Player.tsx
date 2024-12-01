@@ -6,7 +6,6 @@ import { useAppwriteUserContext } from "../../context/AppwriteUserContext";
 export default function Player() {
   const { user, loading } = useAppwriteUserContext();
 
-  console.log(user);
   if (!loading && user && user?.name === "") return <SetDisplayName />;
 
   return (

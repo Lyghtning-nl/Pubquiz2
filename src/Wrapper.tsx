@@ -1,7 +1,6 @@
 import { IonContent, IonPage } from "@ionic/react";
 import { Box, Container } from "@mui/material";
 import React from "react";
-import Snowfall from "react-snowfall";
 
 type WrapperProps = {
   children: React.ReactNode;

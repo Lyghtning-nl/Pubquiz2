@@ -17,7 +17,11 @@ export const useListMemberships = () => {
 
     try {
       const response = await appwriteTeams.listMemberships(game.code);
-      setMemberships(response.memberships);
+      setMemberships(
+        response.memberships.filter(
+          (membership) => membership.userName !== "Master"
+        )
+      );
     } catch (error) {
       console.error("Error fetching memberships:", error);
     } finally {
@@ -37,15 +41,20 @@ export const useListMemberships = () => {
 
     listMemberships();
 
-    const unsubscribe = appwriteClient.subscribe(`memberships`, (response) => {
-      const newMembership = response.payload as Models.Membership;
+    const unsubscribeMemberships = appwriteClient.subscribe(
+      `memberships`,
+      (response) => {
+        const newMembership = response.payload as Models.Membership;
 
-      if (newMembership) {
-        addMembership(newMembership);
+        if (newMembership) {
+          addMembership(newMembership);
+        }
       }
-    });
+    );
 
-    return () => unsubscribe();
+    return () => {
+      unsubscribeMemberships();
+    };
   }, [game?.code, listMemberships, addMembership]);
 
   return { loading, memberships };

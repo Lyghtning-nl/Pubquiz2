@@ -43,6 +43,9 @@ import Player from "./pages/player/Player";
 import Center from "./pages/center/Center";
 import Master from "./pages/master/Master";
 import Snowfall from "react-snowfall";
+import GuestLecture from "./pages/guest-lecture/GuestLecture";
+import Hue from "./pages/Hue";
+import Assignment from "./pages/guest-lecture/Assignment";
 
 setupIonicReact({
   swipeBackEnabled: false,
@@ -96,6 +99,21 @@ export default function App() {
           <Route exact path="/sonos">
             <ContextProviders>
               <Sonos />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/hue">
+            <ContextProviders>
+              <Hue />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/guest-lecture">
+            <ContextProviders>
+              <GuestLecture />
+            </ContextProviders>
+          </Route>
+          <Route exact path="/opdracht">
+            <ContextProviders>
+              <Assignment />
             </ContextProviders>
           </Route>
           <Route>
