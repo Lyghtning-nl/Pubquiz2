@@ -157,15 +157,15 @@ export function AnswerInput() {
             }
             onClick={() => handleSubmit()}
           >
-            {!submitLoading && !checkExistingAnswerLoading && !locked && (
+            Antwoord{" "}
+            {!locked && (
               <>
-                Antwoord verzenden <SendIcon sx={{ ml: 2 }} />
+                verzenden <SendIcon sx={{ ml: 2 }} />
               </>
             )}
-
             {!submitLoading && !checkExistingAnswerLoading && locked && (
               <>
-                Antwoord verzonden <CheckIcon sx={{ ml: 2 }} />
+                verzonden <CheckIcon sx={{ ml: 2 }} />
               </>
             )}
           </Button>

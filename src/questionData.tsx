@@ -151,7 +151,6 @@ export const questionDataRound2: QuestionData = {
   "26": {
     text: "16. Welke artiest zien we hier?",
     image: "https://storage.googleapis.com/music-quiz/v2/jennifer-lopzer.jpg",
-
     correct: "Jennifer Lopez",
   },
   "27": {

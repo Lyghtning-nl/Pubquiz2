@@ -45,6 +45,7 @@ const screenMap: ScreenMap = {
     index: <MasterIndexScreen />,
     intro: <MasterIntroScreen />,
     arena: <MasterArenaScreen />,
+    summary: <MasterArenaScreen />,
   },
 };
 

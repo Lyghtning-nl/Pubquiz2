@@ -19,7 +19,12 @@ router.post("/flash", async (req: Request, res: Response) => {
 
   async function blinkLight() {
     try {
+      // await bridge.groups.setGroupState(83, new GroupLightState().hue(1));
       await bridge.groups.setGroupState(83, new GroupLightState().alertShort());
+      // await bridge.groups.setGroupState(
+      //   83,
+      //   new GroupLightState().incrementBrightness(1)
+      // );
     } catch (err) {
       console.error("Error:", err);
     }

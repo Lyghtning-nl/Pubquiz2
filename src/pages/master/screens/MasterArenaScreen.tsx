@@ -10,6 +10,8 @@ import {
   Collapse,
   IconButton,
   LinearProgress,
+  Menu,
+  MenuItem,
   Stack,
   Table,
   TableBody,
@@ -23,6 +25,7 @@ import { TextScreen } from "../../../components/TextScreen";
 import {
   DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS,
   questionData,
+  questionDataMerged,
   QuestionDataOptions,
   RoundData,
 } from "../../../questionData";
@@ -30,9 +33,14 @@ import { useCallback, useEffect, useState } from "react";
 import {
   Cancel,
   CheckCircle,
+  ChevronLeft,
+  ChevronRight,
+  DisplaySettings,
   ExpandMore,
   KeyboardArrowDown,
   KeyboardArrowUp,
+  Lightbulb,
+  MusicNote,
   Timer,
 } from "@mui/icons-material";
 import { useRealtimeDataContext } from "../../../context/RealtimeDataContext";
@@ -44,11 +52,15 @@ import { Query } from "appwrite";
 import useSound from "use-sound";
 import config from "../../../../config.json";
 import useTimer from "../../../hooks/useTimer";
+import { useUpdateRealtimeData } from "../../../hooks/useUpdateRealtimeData";
 
 export function MasterArenaScreen() {
   const { realtimeData } = useRealtimeDataContext();
-  const { currentQuestion, round: roundFromCurrentQuestion } =
-    useCurrentQuestion();
+  const {
+    currentQuestion,
+    round: roundFromCurrentQuestion,
+    currentQuestionId,
+  } = useCurrentQuestion();
 
   if (!realtimeData || !currentQuestion) return null;
 
@@ -66,7 +78,10 @@ export function MasterArenaScreen() {
         ))}
       </Box>
 
-      <ControlBar currentQuestion={currentQuestion} />
+      <ControlBar
+        currentQuestion={currentQuestion}
+        currentQuestionId={currentQuestionId}
+      />
     </TextScreen>
   );
 }
@@ -350,9 +365,20 @@ const ValidateGivenAnswer = ({
 
 const ControlBar = ({
   currentQuestion,
+  currentQuestionId,
 }: {
   currentQuestion: QuestionDataOptions;
+  currentQuestionId: string;
 }) => {
+  const update = useUpdateRealtimeData();
+  const questionDataMergedKeys = Object.keys(questionDataMerged);
+  const { audio: questionAudio } = currentQuestion;
+
+  const [idleSoundPlaying, setIdleSoundPlaying] = useState(false);
+  const [playCountdownSound, countdownSoundOptions] = useSound(
+    "/assets/fx/countdown.mp3"
+  );
+  const [playIdleSound, idleSoundOptions] = useSound("/assets/fx/idle.wav");
   const [timerActive, setTimerActive] = useState(false);
 
   const [progress, resetTimer] = useTimer({
@@ -362,7 +388,67 @@ const ControlBar = ({
       currentQuestion?.countdown ?? DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS,
   });
 
-  const { audio: questionAudio } = currentQuestion;
+  const cycleQuestion = (dir: "next" | "prev") => {
+    const currentIndex = questionDataMergedKeys.indexOf(currentQuestionId);
+    let nextQuestionId;
+
+    if (dir === "next") {
+      nextQuestionId =
+        currentIndex < questionDataMergedKeys.length - 1
+          ? questionDataMergedKeys[currentIndex + 1]
+          : null;
+    }
+
+    if (dir === "prev") {
+      nextQuestionId =
+        currentIndex > 0 ? questionDataMergedKeys[currentIndex - 1] : null;
+    }
+
+    if (nextQuestionId) {
+      update("question_id", nextQuestionId);
+    }
+  };
+
+  const finishGame = () => {
+    update("screen", "summary");
+  };
+
+  useEffect(() => {
+    resetTimer();
+    setTimerActive(false);
+
+    // HueController.resetScene();
+    setIdleSoundPlaying(false);
+
+    if (!currentQuestion?.audio || currentQuestion.forceCountdownMusic)
+      setTimerActive(true);
+  }, [currentQuestionId]);
+
+  useEffect(() => {
+    if (!timerActive) {
+      countdownSoundOptions.stop();
+      // HueController.brightenUp();
+    } else {
+      if (currentQuestion?.forceCountdownMusic || !currentQuestion?.audio) {
+        // HueController.setCountdownTimerLights(
+        //   currentQuestion?.countdown ??
+        //     DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS,
+        //   currentQuestion?.overrideTargetGroupForFading ?? false
+        // );
+        playCountdownSound();
+      }
+    }
+
+    update("countdown_timer_active", timerActive);
+  }, [timerActive]);
+
+  useEffect(() => {
+    if (idleSoundPlaying) {
+      playIdleSound();
+    } else {
+      idleSoundOptions.stop();
+    }
+  }, [idleSoundPlaying]);
 
   return (
     <Box
@@ -400,6 +486,89 @@ const ControlBar = ({
           <Timer /> Timer {timerActive ? "stoppen" : "starten"} {progress}
         </Button>
       </Stack>
+
+      <ButtonGroup sx={{ marginLeft: "auto" }} disabled={timerActive}>
+        <Button
+          variant="outlined"
+          size="extraSmall"
+          onClick={() => cycleQuestion("prev")}
+        >
+          <ChevronLeft />
+          Vorige vraag
+        </Button>
+
+        {questionDataMergedKeys[questionDataMergedKeys.length - 1] ===
+        currentQuestionId ? (
+          <Button
+            variant="contained"
+            color="success"
+            size="extraSmall"
+            onClick={() => finishGame()}
+          >
+            Naar resultaat! <ChevronRight />
+          </Button>
+        ) : (
+          <>
+            <Button
+              variant="contained"
+              size="extraSmall"
+              onClick={() => cycleQuestion("next")}
+            >
+              Volgende vraag <ChevronRight />
+            </Button>
+          </>
+        )}
+      </ButtonGroup>
+
+      <IconButton
+        // onClick={() => HueController.resetScene()}
+        disabled
+      >
+        <Lightbulb />
+      </IconButton>
+
+      <IconButton onClick={() => setIdleSoundPlaying(!idleSoundPlaying)}>
+        <MusicNote />
+      </IconButton>
+
+      <AdminMenu />
     </Box>
+  );
+};
+
+const AdminMenu = () => {
+  const update = useUpdateRealtimeData();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const menuOpen = Boolean(anchorEl);
+
+  const openMenu = (
+    event:
+      | React.MouseEvent<HTMLButtonElement>
+      | React.TouchEvent<HTMLButtonElement>
+  ) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const closeMenu = () => {
+    setAnchorEl(null);
+  };
+
+  const toggleScreen = (screen: RealtimeDataDocument["screen"]) => {
+    update("screen", screen);
+  };
+
+  return (
+    <>
+      <IconButton onClick={(e) => openMenu(e)}>
+        <DisplaySettings />
+      </IconButton>
+
+      <Menu open={menuOpen} onClose={closeMenu} anchorEl={anchorEl}>
+        <MenuItem onClick={() => toggleScreen("summary")}>
+          Toon tussenstand
+        </MenuItem>
+        <MenuItem onClick={() => toggleScreen("arena")}>Toon arena</MenuItem>
+      </Menu>
+    </>
   );
 };

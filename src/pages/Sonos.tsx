@@ -33,7 +33,7 @@ export default function Sonos() {
           variant="contained"
           onClick={() =>
             playSound(
-              "https://192.168.2.15:4200/v1/storage/buckets/audio/files/672a863500205199d4e6/view?project=672a75920004dd1982c6&project=672a75920004dd1982c6&mode=admin"
+              "http://192.168.2.15:5173/assets/question/steprightup.mp3"
             )
           }
         >

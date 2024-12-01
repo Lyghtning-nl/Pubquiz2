@@ -8,12 +8,11 @@ export function useCurrentQuestion() {
 
   const currentQuestionId = realtimeData.question_id;
 
-  const questionKey = currentQuestionId.toString();
-  const currentQuestion = questionDataMergedTyped[questionKey];
+  const currentQuestion = questionDataMergedTyped[currentQuestionId];
 
   const round = findRoundForQuestion(currentQuestionId);
 
-  return { currentQuestion, round };
+  return { currentQuestion, round, currentQuestionId };
 }
 
 export function findRoundForQuestion(questionId: string) {

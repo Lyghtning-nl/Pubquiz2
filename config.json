@@ -9,7 +9,7 @@
   "config2-infratel": {
     "expressEndpoint": "http://192.168.16.55:8000/",
     "appwrite": {
-    "endpoint": "http://192.168.16.55/v1",
+      "endpoint": "http://192.168.16.55/v1",
       "projectId": "672a75920004dd1982c6",
       "databaseId": "pubquiz"
     }
@@ -26,6 +26,14 @@
     "expressEndpoint": "http://192.168.2.15:8000/",
     "appwrite": {
       "endpoint": "http://192.168.2.15/v1",
+      "projectId": "672a75920004dd1982c6",
+      "databaseId": "pubquiz"
+    }
+  },
+  "config5-http-home-localhost": {
+    "expressEndpoint": "localhost:8000/",
+    "appwrite": {
+      "endpoint": "localhost:80/v1",
       "projectId": "672a75920004dd1982c6",
       "databaseId": "pubquiz"
     }
