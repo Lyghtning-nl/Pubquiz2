@@ -13,7 +13,7 @@ export type QuestionDataOptions = {
   text: string;
   audio?: string;
   image?: string;
-  correct?: string;
+  correct: string;
   type?: "multi";
   options?: Record<string, string>;
   countdown?: number;
@@ -21,6 +21,12 @@ export type QuestionDataOptions = {
   overrideTargetGroupForFading?: number;
   forceCountdownMusic?: boolean;
   quizMasterHelpText?: string;
+};
+
+export const questionDataRount1: QuestionData = {
+  "1": { text: "test" },
+  "2": { text: "test", correct: "adddddd" },
+  "3": { text: "test", correct: "adddddd" },
 };
 
 export const questionDataRound0: QuestionData = {

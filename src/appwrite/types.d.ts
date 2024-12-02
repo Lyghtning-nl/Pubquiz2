@@ -19,7 +19,7 @@ export type GameDocument = Models.Document & {
 };
 
 export type QuestionDocument = Models.Document & {
-  json: string;
+  data: string;
   student: string;
 };
 

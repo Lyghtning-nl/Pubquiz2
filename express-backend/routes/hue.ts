@@ -2,7 +2,6 @@ const appName = "node-hue-api";
 const deviceName = "Macbook Pro Leander";
 
 import { Router, Request, Response } from "express";
-import express from "express";
 import { v3 } from "node-hue-api";
 
 const BRIDGE_USER = "w6Mjagt7Ily5S4O0dOf3Q3WuGRhP-zIx-acsprlc";
@@ -46,8 +45,8 @@ router.post("/blink", async (req: Request, res: Response) => {
       state.hue(0).sat(254);
     }
 
-    await bridge.lights.setLightState(4, state);
-    await bridge.lights.setLightState(4, new LightState().alertShort());
+    await bridge.lights.setLightState(28, state);
+    await bridge.lights.setLightState(28, new LightState().alertShort());
   } catch (err) {
     console.error("Error:", err);
   }
@@ -56,32 +55,6 @@ router.post("/blink", async (req: Request, res: Response) => {
     success: true,
   });
 });
-
-// router.post("/bpm", async (req: Request, res: Response) => {
-//   const bridge = await getBridgeConnection();
-//   const GroupLightState = v3.lightStates.GroupLightState;
-
-//   const bpm = 40;
-//   const interval = 120000 / bpm;
-
-//   async function blinkLight() {
-//     setInterval(async () => {
-//       try {
-//         await bridge.groups.setGroupState(83, new GroupLightState().on());
-
-//         await bridge.groups.setGroupState(83, new GroupLightState().off());
-//       } catch (err) {
-//         console.error("Error:", err);
-//       }
-//     }, interval);
-//   }
-
-//   blinkLight().catch((err) => console.error("Error:", err));
-
-//   res.status(200).json({
-//     success: true,
-//   });
-// });
 
 router.get("/discover", async (req: Request, res: Response) => {
   const discoveryResults = await discovery.nupnpSearch();

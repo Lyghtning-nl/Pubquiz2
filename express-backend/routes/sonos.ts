@@ -36,7 +36,7 @@ router.post("/play", async (req: Request, res: Response) => {
 
     await Roam.SetAVTransportURI(trackUri);
 
-    await Roam.SetVolume(50);
+    await Roam.SetVolume(10);
 
     await Roam?.AVTransportService.Play({
       InstanceID: 0,

@@ -1,34 +1,53 @@
 import {
+  Avatar,
   Card,
   CardContent,
   CircularProgress,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemText,
   Stack,
   Typography,
 } from "@mui/material";
-import { QuestionAnswer } from "@mui/icons-material";
+import { QuestionAnswer, Audiotrack, DataArray } from "@mui/icons-material";
 import { TextScreen } from "../../../components/TextScreen";
 import { useCallback, useEffect, useState } from "react";
 import { QuestionDocument } from "../../../appwrite/types";
 import { appwriteDb } from "../../../appwrite/database";
-import { usePlayOnSonos } from "../../../hooks/sonos";
+import useSound from "use-sound";
 
 export function Assignment2() {
-  const [loading, setLoading] = useState(true);
+  const [enabled, setEnabled] = useState(false);
   const [questionDocuments, setQuestionDocuments] = useState<
     QuestionDocument[] | null
   >(null);
+  const [playDingDongSound, dingDongSoundOptions] = useSound(
+    "/assets/guest-lecture/fx/doorbell.mp3"
+  );
+
+  const enableAudio = () => {
+    playDingDongSound();
+    setEnabled(true);
+  };
+
+  const listJSON = () => {
+    let JSON = "";
+
+    questionDocuments?.map((questionDocument, index) => {
+      JSON = JSON + `"${index + 1}": ${questionDocument.data}`;
+
+      if (index + 1 < questionDocuments.length) JSON = JSON + ",";
+    });
+
+    console.log(JSON);
+  };
 
   const listQuestionDocuments = useCallback(() => {
-    setLoading(true);
-
-    appwriteDb.questions
-      .list()
-      .then((response) => {
-        setQuestionDocuments(response.documents as QuestionDocument[]);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    appwriteDb.questions.list().then((response) => {
+      setQuestionDocuments(response.documents as QuestionDocument[]);
+    });
   }, []);
 
   const addQuestionDocument = useCallback(
@@ -48,7 +67,8 @@ export function Assignment2() {
       const newQuestionDocument = response.payload as QuestionDocument;
 
       addQuestionDocument(newQuestionDocument);
-      usePlayOnSonos("/assets/guest-lecture/fx/doorbell.mp3");
+
+      playDingDongSound();
     }, ".documents");
 
     return () => unsubscribe();
@@ -58,20 +78,50 @@ export function Assignment2() {
     <TextScreen h1="De opdracht 2 / 2">
       <Typography variant="h2">
         Stuur je vraag in! <QuestionAnswer />
-        <Stack alignItems="center" gap={2}>
-          <CircularProgress />
-
-          <Stack direction="row" gap={2} flexWrap="wrap">
-            {questionDocuments?.map((questionDocument) => {
-              return (
-                <Card>
-                  <CardContent>{questionDocument.student ?? "..."}</CardContent>
-                </Card>
-              );
-            })}
-          </Stack>
-        </Stack>
       </Typography>
+
+      <Typography variant="h3">
+        <List>
+          <ListItem>
+            <ListItemAvatar>
+              <Avatar>1</Avatar>
+            </ListItemAvatar>
+            <ListItemText
+              primary={
+                <>
+                  <Typography variant="h3">
+                    Ga in je browser naar http://localhost:5173/opdracht
+                  </Typography>{" "}
+                </>
+              }
+            />
+          </ListItem>
+        </List>
+      </Typography>
+
+      <Stack alignItems="center" gap={2}>
+        <CircularProgress />
+
+        <Stack direction="row" gap={2} flexWrap="wrap">
+          {questionDocuments?.map((questionDocument) => {
+            return (
+              <Card key={questionDocument.$id}>
+                <CardContent>{questionDocument.student ?? "..."}</CardContent>
+              </Card>
+            );
+          })}
+        </Stack>
+
+        {!enabled && (
+          <IconButton onClick={() => enableAudio()}>
+            <Audiotrack />
+          </IconButton>
+        )}
+
+        <IconButton onClick={() => listJSON()}>
+          <DataArray />
+        </IconButton>
+      </Stack>
     </TextScreen>
   );
 }

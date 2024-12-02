@@ -51,13 +51,12 @@ import { appwriteDb } from "../../../appwrite/database";
 import { AnswerDocument, RealtimeDataDocument } from "../../../appwrite/types";
 import { Query } from "appwrite";
 import useSound from "use-sound";
-import config from "../../../../config.json";
 import useTimer from "../../../hooks/useTimer";
 import { useUpdateRealtimeData } from "../../../hooks/useUpdateRealtimeData";
 import { usePlayOnSonos, useStopOnSonos } from "../../../hooks/sonos";
 import { useBlinkOnHue } from "../../../hooks/hue";
 
-export const USE_SONOS = true;
+export const USE_SONOS = false;
 
 export function MasterArenaScreen() {
   const { realtimeData } = useRealtimeDataContext();

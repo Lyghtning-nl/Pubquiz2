@@ -11,7 +11,7 @@ import { Demo } from "./slides/demo";
 import { Assignment2 } from "./slides/assignment2";
 
 export default function GuestLecture() {
-  const [slideIndex, setSlideIndex] = useState(0);
+  const [slideIndex, setSlideIndex] = useState(4);
 
   const nextSlide = () => {
     setSlideIndex(slideIndex + 1);

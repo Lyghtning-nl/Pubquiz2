@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useBlinkOnHue } from "../hooks/hue";
 
 export default function Hue() {
-  const blink = (color?: boolean | "red" | "green") => {
+  const blink = (color?: "red" | "green") => {
     useBlinkOnHue(color);
   };
 
@@ -57,6 +57,7 @@ function ListAllHueDevices() {
         <ul>
           {lights.map((light, index) => (
             <li key={index}>
+              {console.log(light)}
               {light.data.id} | {light.data.name}
             </li>
           ))}
