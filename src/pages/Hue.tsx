@@ -2,7 +2,11 @@ import { IonContent, IonPage } from "@ionic/react";
 import config from "../../config.json";
 import { Button } from "@mui/material";
 import { useEffect, useState } from "react";
-import { useBlinkOnHue } from "../hooks/hue";
+import {
+  useBlinkOnHue,
+  useBrightenUp,
+  useStartCountdown,
+} from "../hooks/hueHooks";
 
 export default function Hue() {
   const blink = (color?: "red" | "green") => {
@@ -12,10 +16,18 @@ export default function Hue() {
   return (
     <IonPage>
       <IonContent fullscreen>
-        <ListAllHueDevices />
+        {/* <ListAllHueDevices /> */}
 
         <Button variant="contained" onClick={() => blink("green")}>
           Blink
+        </Button>
+
+        <Button variant="contained" onClick={() => useStartCountdown(30)}>
+          Start countdown
+        </Button>
+
+        <Button variant="contained" onClick={() => useBrightenUp()}>
+          Brigten up
         </Button>
       </IonContent>
     </IonPage>
@@ -57,7 +69,6 @@ function ListAllHueDevices() {
         <ul>
           {lights.map((light, index) => (
             <li key={index}>
-              {console.log(light)}
               {light.data.id} | {light.data.name}
             </li>
           ))}

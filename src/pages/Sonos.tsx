@@ -3,7 +3,7 @@ import config from "../../config.json";
 import { Button } from "@mui/material";
 import { useState, useEffect } from "react";
 import { ExtendedSonosDevice } from "../../express-backend/routes/sonos";
-import { usePlayOnSonos } from "../hooks/sonos";
+import { usePlayOnSonos } from "../hooks/sonosHooks";
 
 export default function Sonos() {
   const playSound = (uri: string) => {

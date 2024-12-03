@@ -10,8 +10,8 @@ import {
 } from "@mui/material";
 import { Lightbulb, MusicNote, Settings, Web } from "@mui/icons-material";
 import { TextScreen } from "../../../components/TextScreen";
-import { useBlinkOnHue } from "../../../hooks/hue";
-import { usePlayOnSonos } from "../../../hooks/sonos";
+import { useBlinkOnHue } from "../../../hooks/hueHooks";
+import { usePlayOnSonos } from "../../../hooks/sonosHooks";
 
 export function Today() {
   return (

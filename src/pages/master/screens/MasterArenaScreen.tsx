@@ -53,8 +53,12 @@ import { Query } from "appwrite";
 import useSound from "use-sound";
 import useTimer from "../../../hooks/useTimer";
 import { useUpdateRealtimeData } from "../../../hooks/useUpdateRealtimeData";
-import { usePlayOnSonos, useStopOnSonos } from "../../../hooks/sonos";
-import { useBlinkOnHue } from "../../../hooks/hue";
+import { usePlayOnSonos, useStopOnSonos } from "../../../hooks/sonosHooks";
+import {
+  useBlinkOnHue,
+  useBrightenUp,
+  useStartCountdown,
+} from "../../../hooks/hueHooks";
 
 export const USE_SONOS = false;
 
@@ -437,25 +441,25 @@ const ControlBar = ({
 
   useEffect(() => {
     if (!timerActive) {
-      if (USE_SONOS) {
-        useStopOnSonos();
-      } else {
-        countdownSoundOptions.stop();
-      }
-      // HueController.brightenUp();
+      USE_SONOS ? useStopOnSonos() : countdownSoundOptions.stop();
+
+      useBrightenUp();
     } else {
       if (currentQuestion?.forceCountdownMusic || !currentQuestion?.audio) {
+        useStartCountdown(
+          currentQuestion?.countdown ??
+            DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS
+        );
+
         // HueController.setCountdownTimerLights(
         //   currentQuestion?.countdown ??
         //     DEFAULT_COUNTDOWN_PER_QUESTION_IN_SECONDS,
         //   currentQuestion?.overrideTargetGroupForFading ?? false
         // );
 
-        if (USE_SONOS) {
-          usePlayOnSonos("/assets/fx/countdown.mp3");
-        } else {
-          playCountdownSound();
-        }
+        USE_SONOS
+          ? usePlayOnSonos("/assets/fx/countdown.mp3")
+          : playCountdownSound();
       }
     }
 
@@ -464,17 +468,9 @@ const ControlBar = ({
 
   useEffect(() => {
     if (idleSoundPlaying) {
-      if (USE_SONOS) {
-        usePlayOnSonos("/assets/fx/idle.wav");
-      } else {
-        playIdleSound();
-      }
+      USE_SONOS ? usePlayOnSonos("/assets/fx/idle.wav") : playIdleSound();
     } else {
-      if (USE_SONOS) {
-        useStopOnSonos();
-      } else {
-        idleSoundOptions.stop();
-      }
+      USE_SONOS ? useStopOnSonos() : idleSoundOptions.stop();
     }
   }, [idleSoundPlaying]);
 

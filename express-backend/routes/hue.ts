@@ -1,13 +1,12 @@
-const appName = "node-hue-api";
-const deviceName = "Macbook Pro Leander";
-
 import { Router, Request, Response } from "express";
 import { v3 } from "node-hue-api";
+
+const appName = "node-hue-api";
+const deviceName = "Macbook Pro Leander";
 
 const BRIDGE_USER = "w6Mjagt7Ily5S4O0dOf3Q3WuGRhP-zIx-acsprlc";
 // const BRIDGE_CLIENT_KEY = "FCCE173D561457937EC99402064F06ED";
 const BRIDGE_IP = "192.168.2.3";
-
 const discovery = v3.discovery;
 const hueApi = v3.api;
 
@@ -17,17 +16,58 @@ export async function getBridgeConnection() {
   return v3.api.createLocal(BRIDGE_IP).connect(BRIDGE_USER);
 }
 
-router.get("/list", async (req: Request, res: Response) => {
+let countdownTimerInstance: NodeJS.Timeout | null = null;
+let countdownTimerActive = false;
+
+const brightenUp = async () => {
+  countdownTimerActive = false;
+
+  // const bridge = await getBridgeConnection();
+  // await bridge.lights.setLightState(
+  //   28,
+  //   new v3.lightStates.LightState().bri(254)
+  // );
+
+  console.log("Bri:254");
+};
+
+const startCountdown = async (seconds: number) => {
   const bridge = await getBridgeConnection();
 
-  const allLights = await bridge.lights.getAll();
-  const allZones = await bridge.groups.getZones();
+  countdownTimerActive = true;
 
-  res.status(200).json({
-    success: true,
-    lights: allLights,
-    zones: allZones,
-  });
+  // await bridge.lights.setLightState(
+  //   28,
+  //   new v3.lightStates.LightState()
+  //     .brightness(0) // Dim naar 0
+  //     .transitiontime(seconds * 10)
+  // );
+
+  countdownTimerInstance = setInterval(() => {
+    if (!countdownTimerActive) {
+      clearInterval(countdownTimerInstance!);
+    } else {
+      (async () => {
+        console.log("flash");
+
+        // await bridge.lights.setLightState(
+        //   28,
+        //   new v3.lightStates.LightState().alertShort()
+        // );
+      })();
+    }
+  }, 1500);
+};
+
+router.post("/start-countdown", async (req: Request, res: Response) => {
+  const { seconds } = req.body;
+  await startCountdown(seconds);
+  res.write("Timer started");
+});
+
+router.post("/brighten-up", async (req: Request, res: Response) => {
+  await brightenUp();
+  res.write("Brightened");
 });
 
 router.post("/blink", async (req: Request, res: Response) => {
@@ -53,6 +93,18 @@ router.post("/blink", async (req: Request, res: Response) => {
 
   res.status(200).json({
     success: true,
+  });
+});
+
+router.get("/list", async (req: Request, res: Response) => {
+  const bridge = await getBridgeConnection();
+  const allLights = await bridge.lights.getAll();
+  const allZones = await bridge.groups.getZones();
+
+  res.status(200).json({
+    success: true,
+    lights: allLights,
+    zones: allZones,
   });
 });
 
